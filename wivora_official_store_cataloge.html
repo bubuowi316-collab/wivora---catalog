@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wivora - Official store &amp; cataloge</title>
+  <style>
+    /* =========================================================
+       1. DESIGN TOKENS & VARIABEL WARNA (SHADE TIAP BAGIAN)
+       ========================================================= */
+    :root {
+      --wivora-accent: #7A6353;
+      --wivora-accent-dark: #5E4B3E;
+      --wivora-accent-soft: rgba(122, 99, 83, 0.12);
+
+      --wivora-hero-shade: #F9F4EC;
+      --wivora-catalog-shade: #F4EFE7;
+      --wivora-materials-shade: #E8ECE4;
+      --wivora-about-shade: #F3E7E1;
+      --wivora-info-shade: #251F1D;
+
+      --ink-primary: #352E2B;
+      --ink-secondary: #675C56;
+      --ink-muted: #887C75;
+      --surface-card: #FCFBF8;
+      --surface-label: #F7F4EC;
+      --border-subtle: rgba(53, 46, 43, 0.13);
+      --border-strong: rgba(53, 46, 43, 0.24);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--ink-primary);
+      background-color: var(--wivora-hero-shade);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       2. TIPOGRAFI EDITORIAL & LABEL KAIN TENUN WIVORA
+       ========================================================= */
+    .font-editorial {
+      font-family: "Playfair Display", "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    }
+
+    .font-script-wivora {
+      font-family: "Snell Roundhand", "Brush Script MT", "Lucida Handwriting", "Segoe Script", cursive;
+      font-style: italic;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .woven-label-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 13px;
+      border-radius: 6px;
+      background-color: var(--surface-label);
+      border: 1px dashed var(--border-strong);
+      box-shadow:
+        0 6px 18px -8px rgba(37, 31, 29, 0.25),
+        inset 0 0 0 2px rgba(255, 253, 249, 0.9),
+        inset 0 0 0 3px rgba(53, 46, 43, 0.06);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .woven-label-badge:hover {
+      border-color: rgba(53, 46, 43, 0.42);
+      transform: translateY(-1px);
+    }
+
+    .woven-label-divider {
+      width: 1.25px;
+      height: 22px;
+      background-color: rgba(53, 46, 43, 0.55);
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .woven-label-text {
+      font-size: 23px;
+      line-height: 1;
+      color: #322C29;
+    }
+
+    /* =========================================================
+       3. LAYOUT & KOMPONEN UTAMA
+       ========================================================= */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+    }
+
+    /* Header Sticky Tanpa Menu Titik Tiga */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background-color: rgba(252, 250, 246, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+    }
+
+    .brand-sub-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--ink-secondary);
+      padding-left: 2px;
+    }
+
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (min-width: 768px) {
+      .top-nav {
+        gap: 18px;
+      }
+    }
+
+    .top-nav a {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 10px;
+      color: var(--ink-primary);
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .top-nav a:hover {
+      background-color: var(--wivora-accent-soft);
+      color: var(--wivora-accent-dark);
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Tombol */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 9px 16px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-sm {
+      padding: 7px 13px;
+      font-size: 12px;
+    }
+
+    .btn-accent {
+      background-color: var(--wivora-accent);
+      color: #FFFFFF;
+      border-color: var(--wivora-accent);
+    }
+
+    .btn-accent:hover {
+      background-color: var(--wivora-accent-dark);
+      border-color: var(--wivora-accent-dark);
+    }
+
+    .btn-dark {
+      background-color: #2E2623;
+      color: #FAF7F2;
+      border-color: #2E2623;
+    }
+
+    .btn-dark:hover {
+      background-color: #463B36;
+    }
+
+    .btn-outline {
+      background-color: var(--surface-card);
+      color: var(--ink-primary);
+      border-color: var(--border-strong);
+    }
+
+    .btn-outline:hover {
+      background-color: #EFEAE1;
+      border-color: rgba(53, 46, 43, 0.38);
+    }
+
+    /* Banner Pengumuman */
+    .announcement-bar {
+      background-color: #EFE8DD;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-primary);
+      padding: 8px 16px;
+    }
+
+    /* =========================================================
+       4. HERO SECTION (SHADE VOAL HANGAT #F9F4EC)
+       ========================================================= */
+    .hero-section {
+      background-color: var(--wivora-hero-shade);
+      background-image:
+        radial-gradient(rgba(53, 46, 43, 0.03) 1px, transparent 0),
+        radial-gradient(rgba(53, 46, 43, 0.02) 1px, transparent 0);
+      background-size: 18px 18px;
+      background-position: 0 0, 9px 9px;
+      padding: 44px 0 60px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    @media (min-width: 768px) {
+      .hero-section {
+        padding: 68px 0 78px;
+      }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    @media (min-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 48px;
+      }
+    }
+
+    .hero-kicker-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .hero-tagline-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background-color: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border-subtle);
+      color: var(--ink-secondary);
+    }
+
+    .hero-title {
+      margin: 0 0 16px;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    @media (min-width: 640px) {
+      .hero-title {
+        font-size: 46px;
+      }
+    }
+
+    .hero-title span.accent-word {
+      color: var(--wivora-accent);
+      font-style: italic;
+    }
+
+    .hero-desc {
+      margin: 0 0 24px;
+      font-size: 15px;
+      color: var(--ink-secondary);
+      max-width: 580px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .hero-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 560px;
+    }
+
+    .mini-stat {
+      background-color: rgba(255, 255, 255, 0.68);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .mini-stat span {
+      display: block;
+      font-size: 11px;
+      color: var(--ink-secondary);
+    }
+
+    /* Kartu Showcase Visual Hero */
+    .hero-visual-card {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 14px;
+      box-shadow: 0 20px 44px -22px rgba(46, 38, 35, 0.25);
+    }
+
+    .hero-photo-box {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      aspect-ratio: 4 / 4.5;
+      background-color: #EAE2D7;
+    }
+
+    .hero-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-photo-caption {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background-color: var(--wivora-hero-shade);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* =========================================================
+       5. BAGIAN KOLEKSI (#koleksi - SHADE SAND #F4EFE7)
+       ========================================================= */
+    .catalog-section {
+      background-color: var(--wivora-catalog-shade);
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-head {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .section-head {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--wivora-accent);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .section-heading {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    @media (min-width: 640px) {
+      .section-heading {
+        font-size: 36px;
+      }
+    }
+
+    .section-sub {
+      margin: 8px 0 0;
+      font-size: 14px;
+      color: var(--ink-secondary);
+      max-width: 560px;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      padding: 8px 15px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border-strong);
+      background-color: var(--surface-card);
+      color: var(--ink-primary);
+      transition: all 0.2s ease;
+    }
+
+    .filter-chip.active {
+      background-color: var(--wivora-accent);
+      border-color: var(--wivora-accent);
+      color: #FFFFFF;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    @media (min-width: 640px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .product-card {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px -18px rgba(46, 38, 35, 0.24);
+    }
+
+    .product-thumb {
+      position: relative;
+      aspect-ratio: 4 / 3.4;
+      background-color: #EAE4DA;
+      overflow: hidden;
+    }
+
+    .product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .product-card:hover .product-thumb img {
+      transform: scale(1.03);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background-color: rgba(252, 251, 248, 0.92);
+      color: var(--ink-primary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .product-body {
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .product-meta-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+    }
+
+    .product-title {
+      margin: 4px 0 4px;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .product-price {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--wivora-accent-dark);
+    }
+
+    .product-desc {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--ink-secondary);
+    }
+
+    .swatch-box {
+      background-color: var(--wivora-catalog-shade);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    .swatch-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .swatch-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .swatch-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 0 1px rgba(53, 46, 43, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .swatch-dot.selected {
+      transform: scale(1.12);
+      box-shadow: 0 0 0 2px var(--wivora-accent);
+    }
+
+    .product-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .product-detail-trigger {
+      grid-column: span 2;
+      width: 100%;
+    }
+
+    /* =========================================================
+       6. KARAKTER BAHAN (#karakter-bahan - SHADE SAGE-OAT #E8ECE4)
+       ========================================================= */
+    .materials-section {
+      background-color: var(--wivora-materials-shade);
+      background-image: radial-gradient(rgba(53, 46, 43, 0.025) 1px, transparent 0);
+      background-size: 20px 20px;
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .materials-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .materials-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .material-card {
+      background-color: rgba(252, 251, 248, 0.88);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .material-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: var(--wivora-accent-soft);
+      color: var(--wivora-accent-dark);
+      margin-bottom: 10px;
+    }
+
+    .material-card h3 {
+      margin: 0 0 8px;
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .material-card p {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: var(--ink-secondary);
+    }
+
+    .material-specs {
+      list-style: none;
+      margin: 0;
+      padding: 12px 0 0;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--ink-primary);
+      display: grid;
+      gap: 6px;
+    }
+
+    /* =========================================================
+       7. TENTANG WIVORA (#tentang-wivora - SHADE BLUSH-ROSE #F3E7E1)
+       ========================================================= */
+    .about-section {
+      background-color: var(--wivora-about-shade);
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 40px;
+      }
+    }
+
+    .channel-compare-box {
+      background-color: rgba(252, 251, 248, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 22px;
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .channel-item {
+      background-color: var(--wivora-about-shade);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .channel-item h4 {
+      margin: 0 0 4px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .channel-item p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--ink-secondary);
+    }
+
+    /* =========================================================
+       8. INFORMASI WIVORA PALING BAWAH (#informasi-wivora - SHADE GELAP #251F1D)
+       ========================================================= */
+    .info-footer {
+      background-color: var(--wivora-info-shade);
+      color: #F6F1EA;
+      padding: 56px 0 36px;
+    }
+
+    .info-footer-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(246, 241, 234, 0.16);
+      margin-bottom: 28px;
+    }
+
+    .info-footer-top h2 {
+      margin: 4px 0 0;
+      font-size: 28px;
+      color: #FFFFFF;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(246, 241, 234, 0.16);
+    }
+
+    @media (min-width: 768px) {
+      .info-grid {
+        grid-template-columns: 1.3fr 0.9fr 1.1fr;
+      }
+    }
+
+    .info-col-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #D7C5B5;
+      margin: 0 0 12px;
+    }
+
+    .info-links-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(246, 241, 234, 0.85);
+    }
+
+    .info-links-list a:hover {
+      color: #FFFFFF;
+      text-decoration: underline;
+    }
+
+    .channel-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(246, 241, 234, 0.22);
+      background-color: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+      transition: background-color 0.2s ease;
+    }
+
+    .footer-pill:hover {
+      background-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .footer-pill.shopee-pill {
+      background-color: var(--wivora-accent);
+      border-color: var(--wivora-accent);
+    }
+
+    .footer-bottom {
+      padding-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: rgba(246, 241, 234, 0.72);
+    }
+
+    /* =========================================================
+       9. MODAL DETAIL PRODUK & PANEL PERSONALISASI
+       ========================================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background-color: rgba(29, 23, 20, 0.62);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .detail-modal-card {
+      width: 100%;
+      max-width: 780px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background-color: var(--surface-card);
+      border-radius: 24px;
+      border: 1px solid var(--border-strong);
+      padding: 20px;
+      box-shadow: 0 28px 60px -18px rgba(0, 0, 0, 0.45);
+    }
+
+    .detail-modal-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 680px) {
+      .detail-modal-grid {
+        grid-template-columns: 0.95fr 1.05fr;
+      }
+    }
+
+    /* Drawer Personalisasi */
+    .customizer-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 70;
+      width: 100%;
+      max-width: 500px;
+      background-color: #FAF7F2;
+      border-left: 1px solid var(--border-strong);
+      box-shadow: -18px 0 48px -16px rgba(29, 23, 20, 0.35);
+      display: none;
+      flex-direction: column;
+    }
+
+    .customizer-drawer.open {
+      display: flex;
+    }
+
+    .drawer-head {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      background-color: var(--surface-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .drawer-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 10px 16px;
+      background-color: #EFEAE1;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .drawer-tab-btn {
+      padding: 8px 6px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      background-color: transparent;
+      color: var(--ink-secondary);
+    }
+
+    .drawer-tab-btn.active {
+      background-color: var(--surface-card);
+      color: var(--ink-primary);
+      border-color: var(--border-subtle);
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px 28px;
+    }
+
+    .drawer-section-card {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .drawer-section-card h4 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .field-group {
+      margin-bottom: 10px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-secondary);
+      margin-bottom: 4px;
+    }
+
+    .input-control,
+    .select-control,
+    .textarea-control {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background-color: #FFFFFF;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--ink-primary);
+    }
+
+    .textarea-control {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .shade-row-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    @media (min-width: 420px) {
+      .shade-row-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .shade-pick-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background-color: var(--wivora-hero-shade);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .shade-pick-item input[type="color"] {
+      width: 34px;
+      height: 24px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 1px;
+      background: #FFFFFF;
+    }
+
+    .admin-prod-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      background-color: #FAF7F2;
+      margin-bottom: 8px;
+    }
+
+    /* Toast Notifikasi (Pengganti alert()) */
+    .toast-box {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(18px);
+      z-index: 90;
+      background-color: #251F1D;
+      color: #FFFFFF;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- =========================================================
+       1. HEADER NAVIGASI ATAS (LANGSUNG TERLIHAT, TANPA TITIK TIGA)
+       ========================================================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand-link" aria-label="Wivora - Official store &amp; cataloge">
+        <div class="woven-label-badge" id="headerWovenLabel">
+          <span id="headerBrandVisual" style="display:inline-flex;align-items:center;gap:10px;"></span>
+          <span id="headerBrandScript" class="font-script-wivora woven-label-text">Wivora</span>
+        </div>
+        <span id="headerSubIdentity" class="brand-sub-label">Wivora - Official store &amp; cataloge</span>
+      </a>
+
+      <nav class="top-nav" aria-label="Menu Utama">
+        <a href="#koleksi">Koleksi</a>
+        <a href="#karakter-bahan">Karakter Bahan</a>
+        <a href="#tentang-wivora">Tentang Wivora</a>
+        <a href="#informasi-wivora">Informasi Wivora</a>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" id="openCustomizerBtn" class="btn btn-outline btn-sm">
+          <span>Personalisasi</span>
+        </button>
+        <a id="headerShopeeLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-sm">
+          Shopee
+        </a>
+        <a id="headerTiktokLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-sm">
+          TikTok Shop
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner Pengumuman -->
+  <div id="announcementBar" class="announcement-bar">
+    Koleksi terbaru Wivora siap dikirim dari Shopee &amp; TikTok Shop resmi.
+  </div>
+
+  <!-- =========================================================
+       2. HERO SECTION (SHADE VOAL HANGAT #F9F4EC)
+       ========================================================= -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-kicker-row">
+          <div class="woven-label-badge" id="heroWovenLabel">
+            <span id="heroBrandVisual" style="display:inline-flex;align-items:center;gap:10px;"></span>
+            <span id="heroBrandScript" class="font-script-wivora woven-label-text">Wivora</span>
+          </div>
+          <span id="heroTaglinePill" class="hero-tagline-pill">Lembut di Kulit, Jatuh Anggun Setiap Hari</span>
+        </div>
+
+        <h1 id="heroHeadline" class="font-editorial hero-title">
+          Hijab Nyaman untuk Keseharian yang <span class="accent-word">Tenang &amp; Berkelas</span>
+        </h1>
+
+        <p id="heroSubheadline" class="hero-desc">
+          Temukan katalog lengkap hijab Wivora mulai dari Paris Voal, Pashmina Ceruty, Bergo Daily, hingga Inner &amp; Scarf. Cek akurasi shade warna lebih dulu lalu checkout langsung di Shopee atau TikTok Shop.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#koleksi" class="btn btn-outline">Lihat Katalog Koleksi</a>
+          <a id="heroShopeeLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-accent">
+            Belanja di Shopee
+          </a>
+          <a id="heroTiktokLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
+            Belanja di TikTok Shop
+          </a>
+        </div>
+
+        <div class="hero-highlights">
+          <div class="mini-stat">
+            <strong>Akurasi Shade</strong>
+            <span>Swatches warna jelas</span>
+          </div>
+          <div class="mini-stat">
+            <strong>2 Channel Resmi</strong>
+            <span>Shopee &amp; TikTok Shop</span>
+          </div>
+          <div class="mini-stat">
+            <strong>Bisa Dikustom</strong>
+            <span>Panel personalisasi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual-card">
+        <div class="hero-photo-box">
+          <img id="heroShowcaseImg" src="" alt="Showcase Koleksi Hijab Wivora" />
+        </div>
+        <div class="hero-photo-caption">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--wivora-accent);">SIGNATURE EDIT</div>
+            <div id="heroCardTitle" class="font-editorial" style="font-size:18px;font-weight:700;">Voal &amp; Ceruty Series</div>
+            <div id="heroCardNote" style="font-size:12px;color:var(--ink-secondary);">Jahitan tepi rapi &amp; warna menenangkan</div>
+          </div>
+          <a href="#koleksi" class="btn btn-accent btn-sm">Jelajahi</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       3. BAGIAN KOLEKSI (#koleksi - SHADE SAND #F4EFE7)
+       ========================================================= -->
+  <section id="koleksi" class="catalog-section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Katalog Produk Wivora</span>
+          <h2 class="font-editorial section-heading">Koleksi</h2>
+          <p class="section-sub">
+            Pilih kategori dan klik swatch warna untuk melihat nama shade aktif serta tautan langsung ke Shopee atau TikTok Shop.
+          </p>
+        </div>
+
+        <div id="categoryFilterBar" class="filter-bar" role="tablist" aria-label="Filter Kategori Hijab"></div>
+      </div>
+
+      <div id="productGrid" class="product-grid"></div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       4. BAGIAN KARAKTER BAHAN (#karakter-bahan - SHADE SAGE-OAT #E8ECE4)
+       ========================================================= -->
+  <section id="karakter-bahan" class="materials-section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Panduan Material</span>
+          <h2 class="font-editorial section-heading">Karakter Bahan</h2>
+          <p class="section-sub">
+            Perbandingan karakter kain Wivora agar Anda dapat menyesuaikan pilihan bahan dengan aktivitas harian maupun acara spesial.
+          </p>
+        </div>
+      </div>
+
+      <div class="materials-grid">
+        <article class="material-card">
+          <span class="material-tag">Tegak &amp; Adem</span>
+          <h3 class="font-editorial">Voal Premium</h3>
+          <p>
+            Serat halus dengan keseimbangan struktur dan kelembutan yang pas untuk tampilan rapi seharian.
+          </p>
+          <ul class="material-specs">
+            <li>• <strong>Dahi:</strong> Lebih mudah dibentuk dan tidak mudah penyok</li>
+            <li>• <strong>Kenyamanan:</strong> Ringan &amp; breathable untuk cuaca hangat</li>
+            <li>• <strong>Cocok untuk:</strong> Kerja, kuliah, dan daily look rapi</li>
+          </ul>
+        </article>
+
+        <article class="material-card">
+          <span class="material-tag">Jatuh &amp; Flowy</span>
+          <h3 class="font-editorial">Ceruty Babydoll</h3>
+          <p>
+            Tekstur pasir lembut dengan drape yang mengalir anggun sehingga mudah di-styling untuk berbagai tampilan.
+          </p>
+          <ul class="material-specs">
+            <li>• <strong>Draping:</strong> Jatuh lembut mengikuti gerak tubuh</li>
+            <li>• <strong>Styling:</strong> Fleksibel untuk gaya casual maupun formal</li>
+            <li>• <strong>Cocok untuk:</strong> Acara keluarga, kondangan, dan semi-formal</li>
+          </ul>
+        </article>
+
+        <article class="material-card">
+          <span class="material-tag">Praktis &amp; Stretch</span>
+          <h3 class="font-editorial">Jersey &amp; Daily Knit</h3>
+          <p>
+            Kain elastis yang sejuk dan praktis tanpa perlu banyak peniti, dirancang untuk mobilitas cepat.
+          </p>
+          <ul class="material-specs">
+            <li>• <strong>Pemakaian:</strong> Cepat, nyaman, dan pas di lingkar wajah</li>
+            <li>• <strong>Perawatan:</strong> Mudah dicuci dan cepat kering</li>
+            <li>• <strong>Cocok untuk:</strong> Aktivitas rumah, olahraga ringan, atau travelling</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       5. BAGIAN TENTANG WIVORA (#tentang-wivora - SHADE BLUSH-ROSE #F3E7E1)
+       ========================================================= -->
+  <section id="tentang-wivora" class="about-section">
+    <div class="container about-grid">
+      <div>
+        <span class="section-eyebrow">Cerita Brand</span>
+        <h2 class="font-editorial section-heading">Tentang Wivora</h2>
+        <p id="aboutStoryParagraph1" class="section-sub" style="max-width:none;margin-top:14px;">
+          Wivora hadir sebagai ruang modest fashion yang mengedepankan ketenangan warna, kenyamanan bahan, serta detail label kain yang menjadi ciri khas setiap potong hijab.
+        </p>
+        <p id="aboutStoryParagraph2" class="section-sub" style="max-width:none;margin-top:10px;">
+          Melalui website katalog ini, pelanggan dapat meninjau koleksi serta shade warna terlebih dahulu sebelum melanjutkan transaksi ke toko resmi Wivora di Shopee atau TikTok Shop.
+        </p>
+        <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;">
+          <a href="#koleksi" class="btn btn-outline btn-sm">Lihat Koleksi</a>
+          <a href="#informasi-wivora" class="btn btn-accent btn-sm">Informasi Wivora</a>
+        </div>
+      </div>
+
+      <div class="channel-compare-box">
+        <div class="channel-item">
+          <h4>Belanja di Shopee Resmi</h4>
+          <p>Cocok untuk memanfaatkan voucher gratis ongkir, promo tanggal kembar, serta pengiriman reguler/hemat yang praktis.</p>
+        </div>
+        <div class="channel-item">
+          <h4>Belanja di TikTok Shop Resmi</h4>
+          <p>Pas untuk melihat tampilan warna saat sesi live, video styling singkat, serta promo flash sale tertentu.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       6. INFORMASI WIVORA PALING BAWAH (SHADE GELAP #251F1D)
+       ========================================================= -->
+  <footer id="informasi-wivora" class="info-footer">
+    <div class="container">
+      <div class="info-footer-top">
+        <div>
+          <span class="section-eyebrow" style="color:#D7C5B5;">Pusat Info &amp; Tautan Resmi</span>
+          <h2 class="font-editorial">Informasi Wivora</h2>
+        </div>
+        <div class="woven-label-badge" id="footerWovenLabel">
+          <span id="footerBrandVisual" style="display:inline-flex;align-items:center;gap:10px;"></span>
+          <span id="footerBrandScript" class="font-script-wivora woven-label-text">Wivora</span>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div>
+          <h3 class="info-col-title">Tentang &amp; Jam Operasional</h3>
+          <p id="footerStoreInfo" style="margin:0 0 10px;font-size:13px;color:rgba(246,241,234,0.85);">
+            Wivora - Official store &amp; cataloge. Layanan admin &amp; pengiriman aktif Senin–Sabtu (09.00–17.00 WIB).
+          </p>
+          <p id="footerLocationInfo" style="margin:0;font-size:12px;color:rgba(246,241,234,0.72);">
+            Pengiriman ke seluruh Indonesia melalui Shopee &amp; TikTok Shop resmi Wivora.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="info-col-title">Navigasi Halaman</h3>
+          <ul class="info-links-list">
+            <li><a href="#koleksi">Koleksi</a></li>
+            <li><a href="#karakter-bahan">Karakter Bahan</a></li>
+            <li><a href="#tentang-wivora">Tentang Wivora</a></li>
+            <li><a href="#informasi-wivora">Informasi Wivora</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="info-col-title">Channel Resmi Wivora</h3>
+          <div class="channel-pill-row">
+            <a id="footerShopeeLink" href="#" target="_blank" rel="noopener noreferrer" class="footer-pill shopee-pill">
+              Shopee
+            </a>
+            <a id="footerTiktokLink" href="#" target="_blank" rel="noopener noreferrer" class="footer-pill">
+              TikTok Shop
+            </a>
+            <a id="footerInstagramLink" href="#" target="_blank" rel="noopener noreferrer" class="footer-pill">
+              Instagram
+            </a>
+            <a id="footerWhatsappLink" href="#" target="_blank" rel="noopener noreferrer" class="footer-pill">
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; <span id="copyrightYear">2026</span> <strong id="copyrightBrandName" style="color:#FFFFFF;">Wivora - Official store &amp; cataloge</strong>. Semua hak dilindungi.
+        </div>
+        <div>
+          Pengaturan personalisasi tersimpan otomatis di browser (localStorage) dengan dukungan Export/Import JSON.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       7. MODAL DETAIL PRODUK (STYLING & PERAWATAN)
+       ========================================================= -->
+  <div id="productDetailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+    <div class="detail-modal-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;">
+        <span id="detailModalCategory" class="material-tag" style="margin:0;">Kategori</span>
+        <button type="button" id="closeDetailModalBtn" class="btn btn-outline btn-sm">Tutup</button>
+      </div>
+
+      <div class="detail-modal-grid">
+        <div style="border-radius:16px;overflow:hidden;background:#EAE4DA;aspect-ratio:1/1;">
+          <img id="detailModalImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;" />
+        </div>
+
+        <div style="display:flex;flex-direction:column;justify-content:space-between;gap:14px;">
+          <div>
+            <h3 id="detailModalTitle" class="font-editorial" style="margin:0 0 6px;font-size:24px;"></h3>
+            <div id="detailModalPrice" style="font-size:16px;font-weight:700;color:var(--wivora-accent-dark);margin-bottom:10px;"></div>
+            <p id="detailModalDesc" style="margin:0 0 12px;font-size:13px;color:var(--ink-secondary);"></p>
+
+            <div style="background:var(--wivora-catalog-shade);border:1px solid var(--border-subtle);border-radius:12px;padding:10px 12px;margin-bottom:10px;">
+              <div style="font-size:11px;font-weight:700;color:var(--wivora-accent);">SHADE AKTIF &amp; UKURAN</div>
+              <div id="detailModalShadeInfo" style="font-size:12px;font-weight:600;margin-top:2px;"></div>
+            </div>
+
+            <div style="background:#F7F5EF;border:1px solid var(--border-subtle);border-radius:12px;padding:10px 12px;margin-bottom:10px;">
+              <div style="font-size:11px;font-weight:700;">PANDUAN STYLING</div>
+              <p id="detailModalStyling" style="margin:4px 0 0;font-size:12px;color:var(--ink-secondary);"></p>
+            </div>
+
+            <div style="background:#F7F5EF;border:1px solid var(--border-subtle);border-radius:12px;padding:10px 12px;">
+              <div style="font-size:11px;font-weight:700;">PERAWATAN KAIN</div>
+              <p id="detailModalCare" style="margin:4px 0 0;font-size:12px;color:var(--ink-secondary);"></p>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <a id="detailShopeeBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-accent">
+              Checkout Shopee
+            </a>
+            <a id="detailTiktokBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
+              Checkout TikTok
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       8. PANEL PERSONALISASI WEB (DRAWER)
+       ========================================================= -->
+  <div id="customizerBackdrop" class="modal-backdrop" style="justify-content:flex-end;padding:0;">
+    <aside id="customizerDrawer" class="customizer-drawer" role="dialog" aria-modal="true" aria-label="Personalisasi Web Wivora">
+      <div class="drawer-head">
+        <div>
+          <div style="font-size:15px;font-weight:700;">Personalisasi Web Wivora</div>
+          <div id="saveStatusText" style="font-size:11px;color:var(--wivora-accent-dark);font-weight:600;">
+            ● Tersimpan otomatis di browser
+          </div>
+        </div>
+        <button type="button" id="closeCustomizerBtn" class="btn btn-outline btn-sm">Tutup</button>
+      </div>
+
+      <div class="drawer-tabs" role="tablist">
+        <button type="button" class="drawer-tab-btn active" data-tab="brand">1. Brand &amp; Link</button>
+        <button type="button" class="drawer-tab-btn" data-tab="tampilan">2. Shade &amp; Teks</button>
+        <button type="button" class="drawer-tab-btn" data-tab="katalog">3. Katalog &amp; JSON</button>
+      </div>
+
+      <div class="drawer-body">
+        <!-- TAB 1: BRAND, LOGO & LINK -->
+        <div id="tabPanel-brand">
+          <div class="drawer-section-card">
+            <h4>Identitas &amp; Logo Label Kain Wivora</h4>
+            <div class="field-group">
+              <label for="inputBrandScript">Tulisan Script Logo</label>
+              <input id="inputBrandScript" type="text" class="input-control" />
+            </div>
+            <div class="field-group">
+              <label for="inputPageTitle">Judul Halaman (&lt;title&gt;) &amp; Sub-Identitas Header</label>
+              <input id="inputPageTitle" type="text" class="input-control" />
+            </div>
+            <div class="field-group">
+              <label for="inputHeroTagline">Tagline Hero</label>
+              <input id="inputHeroTagline" type="text" class="input-control" />
+            </div>
+            <div class="field-group">
+              <label for="inputCustomLogoFile">Upload Logo Custom (PNG / JPG / SVG)</label>
+              <input id="inputCustomLogoFile" type="file" accept="image/*" class="input-control" />
+            </div>
+            <button type="button" id="resetLogoBtn" class="btn btn-outline btn-sm" style="width:100%;">
+              Reset ke Logo Label Kain Wivora Bawaan
+            </button>
+          </div>
+
+          <div class="drawer-section-card">
+            <h4>Tautan Resmi Toko &amp; Sosial Media</h4>
+            <div class="field-group">
+              <label for="inputShopeeUrl">Link Shopee Resmi</label>
+              <input id="inputShopeeUrl" type="url" class="input-control" />
+            </div>
+            <div class="field-group">
+              <label for="inputTiktokUrl">Link TikTok Shop Resmi</label>
+              <input id="inputTiktokUrl" type="url" class="input-control" />
+            </div>
+            <div class="field-group">
+              <label for="inputInstagramUrl">Link Instagram</label>
+              <input id="inputInstagramUrl" type="url" class="input-control" />
+            </div>
+            <div class="field-group">
+              <label for="inputWhatsappUrl">Link WhatsApp Admin</label>
+              <input id="inputWhatsappUrl" type="url" class="input-control" />
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: WARNA AKSEN, SHADE TIAP BAGIAN & TEKS -->
+        <div id="tabPanel-tampilan" class="hidden">
+          <div class="drawer-section-card">
+            <h4>Warna Aksen Utama</h4>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <label for="inputAccentColor" style="font-size:12px;font-weight:600;">Pilih Warna Aksen</label>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <input id="inputAccentColor" type="color" style="width:44px;height:32px;border:1px solid var(--border-strong);border-radius:8px;padding:1px;background:#fff;" />
+                <span id="accentHexCode" style="font-size:11px;font-weight:700;">#7A6353</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="drawer-section-card">
+            <h4>Shade Warna Tiap Bagian</h4>
+            <div class="shade-row-grid">
+              <div class="shade-pick-item">
+                <label for="shadeHeroColor">Hero (Voal)</label>
+                <input id="shadeHeroColor" type="color" />
+              </div>
+              <div class="shade-pick-item">
+                <label for="shadeCatalogColor">Koleksi (Sand)</label>
+                <input id="shadeCatalogColor" type="color" />
+              </div>
+              <div class="shade-pick-item">
+                <label for="shadeMaterialsColor">Bahan (Sage-Oat)</label>
+                <input id="shadeMaterialsColor" type="color" />
+              </div>
+              <div class="shade-pick-item">
+                <label for="shadeAboutColor">Tentang (Blush)</label>
+                <input id="shadeAboutColor" type="color" />
+              </div>
+              <div class="shade-pick-item" style="grid-column:span 2;">
+                <label for="shadeInfoColor">Informasi Wivora (Paling Bawah)</label>
+                <input id="shadeInfoColor" type="color" />
+              </div>
+            </div>
+          </div>
+
+          <div class="drawer-section-card">
+            <h4>Teks Hero, Tentang &amp; Informasi Wivora</h4>
+            <div class="field-group">
+              <label for="inputAnnouncement">Banner Pengumuman</label>
+              <input id="inputAnnouncement" type="text" class="input-control" />
+            </div>
+            <div class="field-group">
+              <label for="inputHeroHeadline">Judul Utama Hero</label>
+              <input id="inputHeroHeadline" type="text" class="input-control" />
+            </div>
+            <div class="field-group">
+              <label for="inputHeroDesc">Deskripsi Hero</label>
+              <textarea id="inputHeroDesc" class="textarea-control"></textarea>
+            </div>
+            <div class="field-group">
+              <label for="inputAboutP1">Paragraf 1 Tentang Wivora</label>
+              <textarea id="inputAboutP1" class="textarea-control"></textarea>
+            </div>
+            <div class="field-group">
+              <label for="inputAboutP2">Paragraf 2 Tentang Wivora</label>
+              <textarea id="inputAboutP2" class="textarea-control"></textarea>
+            </div>
+            <div class="field-group">
+              <label for="inputFooterInfo">Informasi Operasional (Bagian Bawah)</label>
+              <textarea id="inputFooterInfo" class="textarea-control"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: KELOLA KATALOG & EXPORT/IMPORT JSON -->
+        <div id="tabPanel-katalog" class="hidden">
+          <div class="drawer-section-card">
+            <h4 id="productFormTitle">Tambah Produk Hijab Baru</h4>
+            <form id="productEditorForm">
+              <input type="hidden" id="editProductId" />
+              <div class="field-group">
+                <label for="prodName">Nama Produk</label>
+                <input id="prodName" type="text" class="input-control" required placeholder="Contoh: Paris Voal Soft Ivory" />
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div class="field-group">
+                  <label for="prodCategory">Kategori</label>
+                  <select id="prodCategory" class="select-control">
+                    <option value="Paris Voal">Paris Voal</option>
+                    <option value="Pashmina Ceruty">Pashmina Ceruty</option>
+                    <option value="Bergo Daily">Bergo Daily</option>
+                    <option value="Inner & Scarf">Inner &amp; Scarf</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label for="prodPrice">Harga</label>
+                  <input id="prodPrice" type="text" class="input-control" required placeholder="Rp 39.000" />
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div class="field-group">
+                  <label for="prodBadge">Label Badge</label>
+                  <input id="prodBadge" type="text" class="input-control" placeholder="Best Seller" />
+                </div>
+                <div class="field-group">
+                  <label for="prodSize">Ukuran</label>
+                  <input id="prodSize" type="text" class="input-control" placeholder="115 x 115 cm" />
+                </div>
+              </div>
+              <div class="field-group">
+                <label for="prodDesc">Deskripsi Singkat</label>
+                <textarea id="prodDesc" class="textarea-control" style="min-height:54px;"></textarea>
+              </div>
+              <div class="field-group">
+                <label for="prodSwatches">Daftar Shade (Format: Nama Shade:#HEX, pisahkan koma)</label>
+                <input id="prodSwatches" type="text" class="input-control" placeholder="Warm Ivory:#F3ECE0, Latte:#C5A88E, Espresso:#4A3B32" />
+              </div>
+              <div class="field-group">
+                <label for="prodImageFile">Upload Foto Produk Lokal (Opsional)</label>
+                <input id="prodImageFile" type="file" accept="image/*" class="input-control" />
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button type="submit" class="btn btn-accent btn-sm" style="flex:1;">Simpan Produk</button>
+                <button type="button" id="cancelEditProductBtn" class="btn btn-outline btn-sm hidden">Batal</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="drawer-section-card">
+            <h4>Daftar Produk Aktif</h4>
+            <div id="adminProductList"></div>
+          </div>
+
+          <div class="drawer-section-card">
+            <h4>Cadangan Data (JSON) &amp; Reset</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <button type="button" id="exportJsonBtn" class="btn btn-outline btn-sm">Export JSON</button>
+              <button type="button" id="importJsonTriggerBtn" class="btn btn-outline btn-sm">Import JSON</button>
+              <input id="importJsonFileInput" type="file" accept="application/json,.json" class="hidden" />
+              <button type="button" id="resetDefaultAllBtn" class="btn btn-dark btn-sm">Reset Default</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Toast Notifikasi -->
+  <div id="toastNotification" class="toast-box" role="status" aria-live="polite"></div>
+
+  <!-- =========================================================
+       9. JAVASCRIPT (TAHAN ERROR, NORMALISASI STATE & RENDER)
+       ========================================================= -->
+  <script>
+    (function () {
+      'use strict';
+
+      var STORAGE_KEY = 'wivora_official_store_cataloge_v1';
+      var CATEGORIES = ['Semua', 'Paris Voal', 'Pashmina Ceruty', 'Bergo Daily', 'Inner & Scarf'];
+
+      /* Pembuat ilustrasi SVG inline (tanpa ketergantungan file eksternal) */
+      function createHijabSvgDataUrl(bgHex, clothHex, accentHex, labelText) {
+        var svg = [
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">',
+          '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">',
+          '<stop offset="0%" stop-color="' + bgHex + '"/>',
+          '<stop offset="100%" stop-color="' + clothHex + '"/>',
+          '</linearGradient></defs>',
+          '<rect width="600" height="600" fill="url(#g)"/>',
+          '<circle cx="300" cy="215" r="88" fill="#F6EFE6" opacity="0.9"/>',
+          '<path d="M210 215 C210 120, 390 120, 390 215 C425 320, 415 445, 365 510 L235 510 C185 445, 175 320, 210 215 Z" fill="' + accentHex + '" opacity="0.22"/>',
+          '<path d="M235 190 Q300 145 365 190 Q350 285 300 315 Q250 285 235 190 Z" fill="#FCFBF8" opacity="0.72"/>',
+          '<path d="M275 315 C245 385, 225 455, 255 515 L345 515 C365 455, 345 385, 315 315 Z" fill="' + accentHex + '" opacity="0.34"/>',
+          '<rect x="175" y="534" width="250" height="34" rx="6" fill="#F7F4EC" stroke="#352E2B" stroke-width="1.5" stroke-dasharray="4 3"/>',
+          '<text x="300" y="556" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="18" fill="#352E2B">' + escapeXml(labelText) + '</text>',
+          '</svg>'
+        ].join('');
+        return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+      }
+
+      function escapeXml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function getDefaultProducts() {
+        return [
+          {
+            id: 'prod-paris-voal-1',
+            name: 'Paris Voal Soft Ivory',
+            category: 'Paris Voal',
+            price: 'Rp 39.000',
+            badge: 'Best Seller',
+            size: '115 x 115 cm',
+            desc: 'Hijab segi empat voal lembut yang mudah dibentuk di dahi dan tetap ringan dipakai seharian.',
+            styling: 'Lipat segitiga simetris lalu sematkan jarum pentul di bawah dagu untuk tampilan bersih dan rapi.',
+            care: 'Cuci lembut dengan tangan menggunakan air dingin atau bersuhu normal, hindari pemutih dan setrika suhu sedang.',
+            image: createHijabSvgDataUrl('#F8F2E8', '#E6DAC9', '#7A6353', 'Wivora • Paris Voal'),
+            swatches: [
+              { name: 'Soft Ivory', hex: '#F3ECE0' },
+              { name: 'Warm Latte', hex: '#C7A98B' },
+              { name: 'Sage Mist', hex: '#B5C0B2' },
+              { name: 'Espresso', hex: '#4B3C33' }
+            ]
+          },
+          {
+            id: 'prod-ceruty-1',
+            name: 'Pashmina Ceruty Flowing',
+            category: 'Pashmina Ceruty',
+            price: 'Rp 45.000',
+            badge: 'Flowy Drape',
+            size: '180 x 75 cm',
+            desc: 'Ceruty babydoll bertekstur halus dengan jatuhan kain yang anggun untuk aktivitas harian maupun acara.',
+            styling: 'Sampirkan salah satu sisi ke bahu belakang untuk efek drape lembut yang memanjang.',
+            care: 'Gunakan laundry bag jika mencuci mesin putaran lembut, jemur di tempat teduh dan steam dengan uap ringan.',
+            image: createHijabSvgDataUrl('#F5ECE6', '#E4CFC4', '#8F6A5B', 'Wivora • Pashmina Ceruty'),
+            swatches: [
+              { name: 'Blush Rose', hex: '#E4C2B8' },
+              { name: 'Almond Milk', hex: '#DEC7B2' },
+              { name: 'Cocoa Taupe', hex: '#8A7365' }
+            ]
+          },
+          {
+            id: 'prod-bergo-1',
+            name: 'Bergo Daily Instant',
+            category: 'Bergo Daily',
+            price: 'Rp 49.000',
+            badge: 'Praktis',
+            size: 'Depan 75 cm • Belakang 85 cm',
+            desc: 'Hijab instan potong rapi dengan pad yang nyaman dan jatuh seimbang untuk mobilitas cepat.',
+            styling: 'Kenakan langsung tanpa peniti tambahan untuk padanan tunik, kemeja, maupun gamis harian.',
+            care: 'Cuci dengan deterjen lembut, peras perlahan tanpa memelintir kain, dan keringkan mendatar.',
+            image: createHijabSvgDataUrl('#ECEFE8', '#D6DDD0', '#5E6E5D', 'Wivora • Bergo Daily'),
+            swatches: [
+              { name: 'Sage Oat', hex: '#C6D0C1' },
+              { name: 'Sand Stone', hex: '#D8CFC2' },
+              { name: 'Deep Charcoal', hex: '#3B3633' }
+            ]
+          },
+          {
+            id: 'prod-inner-1',
+            name: 'Inner & Scarf Essential',
+            category: 'Inner & Scarf',
+            price: 'Rp 29.000',
+            badge: 'Essential',
+            size: 'All Size / 90 x 90 cm',
+            desc: 'Pelengkap nyaman berupa ciput anti-geser dan scarf serbaguna dengan pilihan shade netral Wivora.',
+            styling: 'Padukan ciput di balik voal atau ceruty agar hijab tetap rapi dan tidak mudah bergeser.',
+            care: 'Cuci terpisah dengan warna senada dan jemur di area berangin agar elastisitas serat tetap terjaga.',
+            image: createHijabSvgDataUrl('#F4EFE9', '#DFD6CA', '#6E5B4E', 'Wivora • Inner & Scarf'),
+            swatches: [
+              { name: 'Bone White', hex: '#F5F2EC' },
+              { name: 'Mocca Sand', hex: '#B99C82' },
+              { name: 'Dark Roast', hex: '#3E322C' }
+            ]
+          }
+        ];
+      }
+
+      function getDefaultState() {
+        return {
+          brandScript: 'Wivora',
+          pageTitle: 'Wivora - Official store & cataloge',
+          heroTagline: 'Lembut di Kulit, Jatuh Anggun Setiap Hari',
+          customLogoDataUrl: '',
+          shopeeUrl: 'https://shopee.co.id/wivora.official',
+          tiktokUrl: 'https://tiktok.com/@wivora.official',
+          instagramUrl: 'https://instagram.com/wivora.official',
+          whatsappUrl: 'https://wa.me/6281234567890?text=Halo%20Admin%20Wivora%2C%20saya%20ingin%20bertanya%20seputar%20koleksi%20hijab.',
+          accentColor: '#7A6353',
+          accentDark: '#5E4B3E',
+          shadeHero: '#F9F4EC',
+          shadeCatalog: '#F4EFE7',
+          shadeMaterials: '#E8ECE4',
+          shadeAbout: '#F3E7E1',
+          shadeInfo: '#251F1D',
+          announcement: 'Koleksi terbaru Wivora siap dikirim dari Shopee & TikTok Shop resmi.',
+          heroHeadline: 'Hijab Nyaman untuk Keseharian yang Tenang & Berkelas',
+          heroSubheadline: 'Temukan katalog lengkap hijab Wivora mulai dari Paris Voal, Pashmina Ceruty, Bergo Daily, hingga Inner & Scarf. Cek akurasi shade warna lebih dulu lalu checkout langsung di Shopee atau TikTok Shop.',
+          heroShowcaseImage: createHijabSvgDataUrl('#F9F4EC', '#E5D9C7', '#7A6353', 'Wivora - Official store & cataloge'),
+          aboutP1: 'Wivora hadir sebagai ruang modest fashion yang mengedepankan ketenangan warna, kenyamanan bahan, serta detail label kain yang menjadi ciri khas setiap potong hijab.',
+          aboutP2: 'Melalui website katalog ini, pelanggan dapat meninjau koleksi serta shade warna terlebih dahulu sebelum melanjutkan transaksi ke toko resmi Wivora di Shopee atau TikTok Shop.',
+          footerInfo: 'Wivora - Official store & cataloge. Layanan admin & pengiriman aktif Senin–Sabtu (09.00–17.00 WIB).',
+          footerLocation: 'Pengiriman ke seluruh Indonesia melalui Shopee & TikTok Shop resmi Wivora.',
+          products: getDefaultProducts()
+        };
+      }
+
+      function normalizeState(raw) {
+        var def = getDefaultState();
+        if (!raw || typeof raw !== 'object') return def;
+
+        var merged = {};
+        Object.keys(def).forEach(function (k) {
+          if (k === 'products') return;
+          if (typeof raw[k] === 'string') {
+            merged[k] = raw[k];
+          } else {
+            merged[k] = def[k];
+          }
+        });
+
+        if (Array.isArray(raw.products) && raw.products.length > 0) {
+          merged.products = raw.products.map(function (item, idx) {
+            var fallbackProd = def.products[idx % def.products.length];
+            var validSwatches = Array.isArray(item && item.swatches) && item.swatches.length > 0
+              ? item.swatches.filter(function (s) { return s && s.name && s.hex; })
+              : fallbackProd.swatches;
+
+            return {
+              id: (item && item.id) ? String(item.id) : ('prod-' + idx + '-' + Date.now()),
+              name: (item && item.name) ? String(item.name) : fallbackProd.name,
+              category: CATEGORIES.indexOf(item && item.category) > 0 ? item.category : 'Paris Voal',
+              price: (item && item.price) ? String(item.price) : fallbackProd.price,
+              badge: (item && item.badge) ? String(item.badge) : 'Koleksi',
+              size: (item && item.size) ? String(item.size) : '115 x 115 cm',
+              desc: (item && item.desc) ? String(item.desc) : fallbackProd.desc,
+              styling: (item && item.styling) ? String(item.styling) : fallbackProd.styling,
+              care: (item && item.care) ? String(item.care) : fallbackProd.care,
+              image: (item && typeof item.image === 'string' && item.image.length > 0) ? item.image : fallbackProd.image,
+              swatches: validSwatches
+            };
+          });
+        } else {
+          merged.products = def.products;
+        }
+
+        return merged;
+      }
+
+      /* Wrapper aman untuk localStorage */
+      function safeLoadState() {
+        try {
+          if (!window.localStorage) return getDefaultState();
+          var rawStr = window.localStorage.getItem(STORAGE_KEY);
+          if (!rawStr) return getDefaultState();
+          return normalizeState(JSON.parse(rawStr));
+        } catch (err) {
+          return getDefaultState();
+        }
+      }
+
+      function safeSaveState(nextState, statusLabel) {
+        try {
+          if (window.localStorage) {
+            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+          }
+          var statusEl = document.getElementById('saveStatusText');
+          if (statusEl) {
+            statusEl.textContent = statusLabel || '● Tersimpan otomatis di browser';
+          }
+        } catch (err) {
+          var statusElErr = document.getElementById('saveStatusText');
+          if (statusElErr) {
+            statusElErr.textContent = '● Mode memori aktif (penyimpanan lokal terbatas)';
+          }
+        }
+      }
+
+      function darkenHex(hex, percent) {
+        try {
+          var clean = String(hex || '#7A6353').replace('#', '');
+          if (clean.length !== 6) return '#5E4B3E';
+          var num = parseInt(clean, 16);
+          var amt = Math.round(2.55 * (percent || 20));
+          var r = Math.max(0, (num >> 16) - amt);
+          var g = Math.max(0, ((num >> 8) & 0x00FF) - amt);
+          var b = Math.max(0, (num & 0x0000FF) - amt);
+          return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        } catch (e) {
+          return '#5E4B3E';
+        }
+      }
+
+      function hexToRgba(hex, alpha) {
+        try {
+          var clean = String(hex || '#7A6353').replace('#', '');
+          if (clean.length !== 6) return 'rgba(122, 99, 83, ' + alpha + ')';
+          var num = parseInt(clean, 16);
+          var r = (num >> 16) & 255;
+          var g = (num >> 8) & 255;
+          var b = num & 255;
+          return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+        } catch (e) {
+          return 'rgba(122, 99, 83, ' + alpha + ')';
+        }
+      }
+
+      function showToast(msg) {
+        var toast = document.getElementById('toastNotification');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        window.clearTimeout(showToast._timer);
+        showToast._timer = window.setTimeout(function () {
+          toast.classList.remove('show');
+        }, 2400);
+      }
+
+      /* SVG Emblem botani simetris + garis pemisah vertikal sesuai detail label kain Wivora */
+      function buildBotanicalLogoVisual(customLogoUrl, brandScript) {
+        if (customLogoUrl) {
+          return '<img src="' + customLogoUrl + '" alt="Logo ' + escapeXml(brandScript) + '" style="height:26px;width:auto;max-width:110px;object-fit:contain;" />';
+        }
+        return [
+          '<svg width="34" height="24" viewBox="0 0 42 30" fill="none" aria-hidden="true" style="flex-shrink:0;">',
+          '<path d="M18.5 3 C16.2 8.2 16.3 14.8 18.5 20.2 C20.7 14.8 20.8 8.2 18.5 3 Z" fill="#322C29"/>',
+          '<path d="M15.8 21.4 C11.4 16.8 6.9 13.6 2.5 12.2 C3.6 17.6 8 22.1 15.8 21.4 Z" fill="#322C29"/>',
+          '<path d="M21.2 21.4 C25.6 16.8 30.1 13.6 34.5 12.2 C33.4 17.6 29 22.1 21.2 21.4 Z" fill="#322C29"/>',
+          '<path d="M16.8 23.4 C12.9 21.6 9 21.8 6 24.2 C9.7 25.8 13.8 25.5 16.8 23.4 Z" fill="#322C29" opacity="0.92"/>',
+          '<path d="M20.2 23.4 C24.1 21.6 28 21.8 31 24.2 C27.3 25.8 23.2 25.5 20.2 23.4 Z" fill="#322C29" opacity="0.92"/>',
+          '</svg>',
+          '<span class="woven-label-divider" aria-hidden="true"></span>'
+        ].join('');
+      }
+
+      /* =========================================================
+         10. STATE RUNTIME & RENDERING
+         ========================================================= */
+      var appState = safeLoadState();
+      var activeCategory = 'Semua';
+      var selectedSwatchIndexByProdId = {};
+
+      function getSelectedSwatch(product) {
+        var list = (product && Array.isArray(product.swatches) && product.swatches.length > 0)
+          ? product.swatches
+          : [{ name: 'Default Shade', hex: '#C7A98B' }];
+        var idx = selectedSwatchIndexByProdId[product.id] || 0;
+        if (idx < 0 || idx >= list.length) idx = 0;
+        return { swatch: list[idx], index: idx, list: list };
+      }
+
+      function buildChannelUrl(baseUrl, productName, shadeName, channelName) {
+        var cleanBase = String(baseUrl || '').trim();
+        if (!cleanBase) return '#koleksi';
+        var queryPart = encodeURIComponent(productName + ' - ' + shadeName + ' (' + channelName + ')');
+        if (cleanBase.indexOf('wa.me') !== -1) {
+          var sep = cleanBase.indexOf('?') === -1 ? '?' : '&';
+          return cleanBase + (cleanBase.indexOf('text=') === -1 ? sep + 'text=' + queryPart : '');
+        }
+        return cleanBase;
+      }
+
+      function applyThemeAndBrand() {
+        var root = document.documentElement;
+        var accent = appState.accentColor || '#7A6353';
+        var accentDark = appState.accentDark || darkenHex(accent, 22);
+
+        root.style.setProperty('--wivora-accent', accent);
+        root.style.setProperty('--wivora-accent-dark', accentDark);
+        root.style.setProperty('--wivora-accent-soft', hexToRgba(accent, 0.13));
+        root.style.setProperty('--wivora-hero-shade', appState.shadeHero || '#F9F4EC');
+        root.style.setProperty('--wivora-catalog-shade', appState.shadeCatalog || '#F4EFE7');
+        root.style.setProperty('--wivora-materials-shade', appState.shadeMaterials || '#E8ECE4');
+        root.style.setProperty('--wivora-about-shade', appState.shadeAbout || '#F3E7E1');
+        root.style.setProperty('--wivora-info-shade', appState.shadeInfo || '#251F1D');
+
+        var titleText = appState.pageTitle || 'Wivora - Official store & cataloge';
+        document.title = titleText;
+
+        var subIdentityEl = document.getElementById('headerSubIdentity');
+        if (subIdentityEl) subIdentityEl.textContent = titleText;
+
+        var scriptName = appState.brandScript || 'Wivora';
+        var logoVisualHtml = buildBotanicalLogoVisual(appState.customLogoDataUrl, scriptName);
+
+        ['header', 'hero', 'footer'].forEach(function (prefix) {
+          var vis = document.getElementById(prefix + 'BrandVisual');
+          var txt = document.getElementById(prefix + 'BrandScript');
+          if (vis) vis.innerHTML = logoVisualHtml;
+          if (txt) {
+            txt.textContent = scriptName;
+            txt.style.display = appState.customLogoDataUrl ? 'none' : 'inline';
+          }
+        });
+
+        var taglinePill = document.getElementById('heroTaglinePill');
+        if (taglinePill) taglinePill.textContent = appState.heroTagline || 'Lembut di Kulit, Jatuh Anggun Setiap Hari';
+
+        var announcementEl = document.getElementById('announcementBar');
+        if (announcementEl) announcementEl.textContent = appState.announcement || '';
+
+        var heroHeadline = document.getElementById('heroHeadline');
+        if (heroHeadline) heroHeadline.textContent = appState.heroHeadline || 'Hijab Nyaman untuk Keseharian yang Tenang & Berkelas';
+
+        var heroSubheadline = document.getElementById('heroSubheadline');
+        if (heroSubheadline) heroSubheadline.textContent = appState.heroSubheadline || '';
+
+        var heroImg = document.getElementById('heroShowcaseImg');
+        if (heroImg && appState.heroShowcaseImage) {
+          heroImg.src = appState.heroShowcaseImage;
+        }
+
+        var about1 = document.getElementById('aboutStoryParagraph1');
+        var about2 = document.getElementById('aboutStoryParagraph2');
+        if (about1) about1.textContent = appState.aboutP1 || '';
+        if (about2) about2.textContent = appState.aboutP2 || '';
+
+        var footerInfo = document.getElementById('footerStoreInfo');
+        var footerLoc = document.getElementById('footerLocationInfo');
+        var copyrightBrand = document.getElementById('copyrightBrandName');
+        var copyrightYear = document.getElementById('copyrightYear');
+        if (footerInfo) footerInfo.textContent = appState.footerInfo || '';
+        if (footerLoc) footerLoc.textContent = appState.footerLocation || '';
+        if (copyrightBrand) copyrightBrand.textContent = titleText;
+        if (copyrightYear) copyrightYear.textContent = String(new Date().getFullYear());
+
+        var linkBindings = [
+          ['headerShopeeLink', appState.shopeeUrl],
+          ['heroShopeeLink', appState.shopeeUrl],
+          ['footerShopeeLink', appState.shopeeUrl],
+          ['headerTiktokLink', appState.tiktokUrl],
+          ['heroTiktokLink', appState.tiktokUrl],
+          ['footerTiktokLink', appState.tiktokUrl],
+          ['footerInstagramLink', appState.instagramUrl],
+          ['footerWhatsappLink', appState.whatsappUrl]
+        ];
+        linkBindings.forEach(function (pair) {
+          var el = document.getElementById(pair[0]);
+          if (el) el.setAttribute('href', pair[1] || '#koleksi');
+        });
+      }
+
+      function renderCategoryFilters() {
+        var bar = document.getElementById('categoryFilterBar');
+        if (!bar) return;
+        bar.innerHTML = '';
+
+        CATEGORIES.forEach(function (cat) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'filter-chip' + (activeCategory === cat ? ' active' : '');
+          btn.textContent = cat;
+          btn.addEventListener('click', function () {
+            activeCategory = cat;
+            renderCategoryFilters();
+            renderProducts();
+          });
+          bar.appendChild(btn);
+        });
+      }
+
+      function renderProducts() {
+        var grid = document.getElementById('productGrid');
+        if (!grid) return;
+
+        var filtered = appState.products.filter(function (p) {
+          return activeCategory === 'Semua' || p.category === activeCategory;
+        });
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '<div style="grid-column:1/-1;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:20px;padding:32px;text-align:center;">Belum ada produk pada kategori <strong>' + escapeXml(activeCategory) + '</strong>.</div>';
+          return;
+        }
+
+        grid.innerHTML = '';
+
+        filtered.forEach(function (product) {
+          var sel = getSelectedSwatch(product);
+          var activeSwatch = sel.swatch;
+          var shopeeHref = buildChannelUrl(appState.shopeeUrl, product.name, activeSwatch.name, 'Shopee');
+          var tiktokHref = buildChannelUrl(appState.tiktokUrl, product.name, activeSwatch.name, 'TikTok Shop');
+
+          var card = document.createElement('article');
+          card.className = 'product-card';
+
+          var swatchesHtml = sel.list.map(function (sw, i) {
+            var isSel = i === sel.index;
+            return '<button type="button" class="swatch-dot' + (isSel ? ' selected' : '') + '" style="background-color:' + escapeXml(sw.hex) + ';" title="' + escapeXml(sw.name) + '" aria-label="Pilih shade ' + escapeXml(sw.name) + '" data-prod-id="' + escapeXml(product.id) + '" data-sw-idx="' + i + '"></button>';
+          }).join('');
+
+          card.innerHTML = [
+            '<div class="product-thumb">',
+            '<img src="' + escapeXml(product.image) + '" alt="' + escapeXml(product.name) + '" />',
+            '<span class="product-badge">' + escapeXml(product.badge) + '</span>',
+            '</div>',
+            '<div class="product-body">',
+            '<div>',
+            '<div class="product-meta-top"><span>' + escapeXml(product.category) + '</span><span>' + escapeXml(product.size) + '</span></div>',
+            '<h3 class="font-editorial product-title">' + escapeXml(product.name) + '</h3>',
+            '<div class="product-price">' + escapeXml(product.price) + '</div>',
+            '<p class="product-desc">' + escapeXml(product.desc) + '</p>',
+            '</div>',
+            '<div class="swatch-box">',
+            '<div class="swatch-header"><span style="color:var(--ink-secondary);">Shade aktif:</span><strong style="color:var(--ink-primary);">' + escapeXml(activeSwatch.name) + '</strong></div>',
+            '<div class="swatch-list">' + swatchesHtml + '</div>',
+            '</div>',
+            '<div class="product-actions">',
+            '<a href="' + escapeXml(shopeeHref) + '" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-sm">Shopee</a>',
+            '<a href="' + escapeXml(tiktokHref) + '" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-sm">TikTok Shop</a>',
+            '<button type="button" class="btn btn-outline btn-sm product-detail-trigger" data-detail-id="' + escapeXml(product.id) + '">Detail, Styling &amp; Perawatan</button>',
+            '</div>',
+            '</div>'
+          ].join('');
+
+          grid.appendChild(card);
+        });
+
+        /* Pasang event klik swatch */
+        grid.querySelectorAll('.swatch-dot').forEach(function (dotBtn) {
+          dotBtn.addEventListener('click', function () {
+            var pId = dotBtn.getAttribute('data-prod-id');
+            var swIdx = parseInt(dotBtn.getAttribute('data-sw-idx'), 10);
+            if (pId && !isNaN(swIdx)) {
+              selectedSwatchIndexByProdId[pId] = swIdx;
+              renderProducts();
+            }
+          });
+        });
+
+        /* Pasang event buka modal detail produk */
+        grid.querySelectorAll('.product-detail-trigger').forEach(function (detBtn) {
+          detBtn.addEventListener('click', function () {
+            var pId = detBtn.getAttribute('data-detail-id');
+            openProductDetailModal(pId);
+          });
+        });
+      }
+
+      /* =========================================================
+         11. MODAL DETAIL PRODUK
+         ========================================================= */
+      function openProductDetailModal(productId) {
+        var prod = null;
+        for (var i = 0; i < appState.products.length; i++) {
+          if (appState.products[i].id === productId) {
+            prod = appState.products[i];
+            break;
+          }
+        }
+        if (!prod) return;
+
+        var sel = getSelectedSwatch(prod);
+        document.getElementById('detailModalCategory').textContent = prod.category;
+        document.getElementById('detailModalImg').src = prod.image;
+        document.getElementById('detailModalImg').alt = prod.name;
+        document.getElementById('detailModalTitle').textContent = prod.name;
+        document.getElementById('detailModalPrice').textContent = prod.price;
+        document.getElementById('detailModalDesc').textContent = prod.desc;
+        document.getElementById('detailModalShadeInfo').textContent = sel.swatch.name + ' • Ukuran: ' + prod.size;
+        document.getElementById('detailModalStyling').textContent = prod.styling;
+        document.getElementById('detailModalCare').textContent = prod.care;
+
+        document.getElementById('detailShopeeBtn').href = buildChannelUrl(appState.shopeeUrl, prod.name, sel.swatch.name, 'Shopee');
+        document.getElementById('detailTiktokBtn').href = buildChannelUrl(appState.tiktokUrl, prod.name, sel.swatch.name, 'TikTok Shop');
+
+        document.getElementById('productDetailModal').classList.add('open');
+      }
+
+      function closeProductDetailModal() {
+        document.getElementById('productDetailModal').classList.remove('open');
+      }
+
+      /* =========================================================
+         12. PANEL PERSONALISASI & MANAJEMEN PRODUK / JSON
+         ========================================================= */
+      function populateCustomizerInputs() {
+        document.getElementById('inputBrandScript').value = appState.brandScript || 'Wivora';
+        document.getElementById('inputPageTitle').value = appState.pageTitle || 'Wivora - Official store & cataloge';
+        document.getElementById('inputHeroTagline').value = appState.heroTagline || '';
+        document.getElementById('inputShopeeUrl').value = appState.shopeeUrl || '';
+        document.getElementById('inputTiktokUrl').value = appState.tiktokUrl || '';
+        document.getElementById('inputInstagramUrl').value = appState.instagramUrl || '';
+        document.getElementById('inputWhatsappUrl').value = appState.whatsappUrl || '';
+
+        document.getElementById('inputAccentColor').value = appState.accentColor || '#7A6353';
+        document.getElementById('accentHexCode').textContent = (appState.accentColor || '#7A6353').toUpperCase();
+
+        document.getElementById('shadeHeroColor').value = appState.shadeHero || '#F9F4EC';
+        document.getElementById('shadeCatalogColor').value = appState.shadeCatalog || '#F4EFE7';
+        document.getElementById('shadeMaterialsColor').value = appState.shadeMaterials || '#E8ECE4';
+        document.getElementById('shadeAboutColor').value = appState.shadeAbout || '#F3E7E1';
+        document.getElementById('shadeInfoColor').value = appState.shadeInfo || '#251F1D';
+
+        document.getElementById('inputAnnouncement').value = appState.announcement || '';
+        document.getElementById('inputHeroHeadline').value = appState.heroHeadline || '';
+        document.getElementById('inputHeroDesc').value = appState.heroSubheadline || '';
+        document.getElementById('inputAboutP1').value = appState.aboutP1 || '';
+        document.getElementById('inputAboutP2').value = appState.aboutP2 || '';
+        document.getElementById('inputFooterInfo').value = appState.footerInfo || '';
+
+        renderAdminProductList();
+      }
+
+      function swatchesToText(swatches) {
+        if (!Array.isArray(swatches)) return '';
+        return swatches.map(function (s) {
+          return s.name + ':' + s.hex;
+        }).join(', ');
+      }
+
+      function parseSwatchesText(rawText) {
+        var parts = String(rawText || '').split(',');
+        var result = [];
+        parts.forEach(function (part) {
+          var trimmed = part.trim();
+          if (!trimmed) return;
+          var idx = trimmed.lastIndexOf(':');
+          if (idx > 0) {
+            var nm = trimmed.slice(0, idx).trim();
+            var hx = trimmed.slice(idx + 1).trim();
+            if (/^#[0-9A-Fa-f]{6}$/.test(hx)) {
+              result.push({ name: nm || 'Shade', hex: hx });
+            }
+          }
+        });
+        return result.length > 0 ? result : [{ name: 'Warm Sand', hex: '#C7A98B' }];
+      }
+
+      function renderAdminProductList() {
+        var container = document.getElementById('adminProductList');
+        if (!container) return;
+        container.innerHTML = '';
+
+        appState.products.forEach(function (prod) {
+          var row = document.createElement('div');
+          row.className = 'admin-prod-item';
+          row.innerHTML = [
+            '<div style="min-width:0;">',
+            '<div style="font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeXml(prod.name) + '</div>',
+            '<div style="font-size:11px;color:var(--ink-secondary);">' + escapeXml(prod.category) + ' • ' + escapeXml(prod.price) + '</div>',
+            '</div>',
+            '<div style="display:flex;gap:6px;flex-shrink:0;">',
+            '<button type="button" class="btn btn-outline btn-sm" data-edit-id="' + escapeXml(prod.id) + '">Edit</button>',
+            '<button type="button" class="btn btn-dark btn-sm" data-del-id="' + escapeXml(prod.id) + '">Hapus</button>',
+            '</div>'
+          ].join('');
+          container.appendChild(row);
+        });
+
+        container.querySelectorAll('[data-edit-id]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-edit-id');
+            startEditProduct(id);
+          });
+        });
+
+        container.querySelectorAll('[data-del-id]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-del-id');
+            if (appState.products.length <= 1) {
+              showToast('Minimal harus ada 1 produk di katalog.');
+              return;
+            }
+            appState.products = appState.products.filter(function (p) { return p.id !== id; });
+            delete selectedSwatchIndexByProdId[id];
+            renderProducts();
+            renderAdminProductList();
+            safeSaveState(appState, '● Produk dihapus & tersimpan');
+            showToast('Produk dihapus.');
+          });
+        });
+      }
+
+      function startEditProduct(productId) {
+        var prod = null;
+        for (var i = 0; i < appState.products.length; i++) {
+          if (appState.products[i].id === productId) {
+            prod = appState.products[i];
+            break;
+          }
+        }
+        if (!prod) return;
+
+        document.getElementById('productFormTitle').textContent = 'Edit Produk: ' + prod.name;
+        document.getElementById('editProductId').value = prod.id;
+        document.getElementById('prodName').value = prod.name;
+        document.getElementById('prodCategory').value = prod.category;
+        document.getElementById('prodPrice').value = prod.price;
+        document.getElementById('prodBadge').value = prod.badge;
+        document.getElementById('prodSize').value = prod.size;
+        document.getElementById('prodDesc').value = prod.desc;
+        document.getElementById('prodSwatches').value = swatchesToText(prod.swatches);
+        document.getElementById('prodImageFile').value = '';
+        document.getElementById('cancelEditProductBtn').classList.remove('hidden');
+      }
+
+      function resetProductForm() {
+        document.getElementById('productFormTitle').textContent = 'Tambah Produk Hijab Baru';
+        document.getElementById('editProductId').value = '';
+        document.getElementById('productEditorForm').reset();
+        document.getElementById('cancelEditProductBtn').classList.add('hidden');
+      }
+
+      function openCustomizer() {
+        populateCustomizerInputs();
+        document.getElementById('customizerBackdrop').classList.add('open');
+        document.getElementById('customizerDrawer').classList.add('open');
+      }
+
+      function closeCustomizer() {
+        document.getElementById('customizerBackdrop').classList.remove('open');
+        document.getElementById('customizerDrawer').classList.remove('open');
+      }
+
+      function bindEvents() {
+        document.getElementById('openCustomizerBtn').addEventListener('click', openCustomizer);
+        document.getElementById('closeCustomizerBtn').addEventListener('click', closeCustomizer);
+        document.getElementById('customizerBackdrop').addEventListener('click', function (e) {
+          if (e.target.id === 'customizerBackdrop') closeCustomizer();
+        });
+
+        document.getElementById('closeDetailModalBtn').addEventListener('click', closeProductDetailModal);
+        document.getElementById('productDetailModal').addEventListener('click', function (e) {
+          if (e.target.id === 'productDetailModal') closeProductDetailModal();
+        });
+
+        /* Ganti Tab Drawer */
+        document.querySelectorAll('.drawer-tab-btn').forEach(function (tabBtn) {
+          tabBtn.addEventListener('click', function () {
+            var targetTab = tabBtn.getAttribute('data-tab');
+            document.querySelectorAll('.drawer-tab-btn').forEach(function (b) {
+              b.classList.toggle('active', b === tabBtn);
+            });
+            ['brand', 'tampilan', 'katalog'].forEach(function (panelKey) {
+              var panel = document.getElementById('tabPanel-' + panelKey);
+              if (panel) panel.classList.toggle('hidden', panelKey !== targetTab);
+            });
+          });
+        });
+
+        /* Binding input teks & link */
+        var textBindings = [
+          ['inputBrandScript', 'brandScript', true],
+          ['inputPageTitle', 'pageTitle', false],
+          ['inputHeroTagline', 'heroTagline', false],
+          ['inputShopeeUrl', 'shopeeUrl', true],
+          ['inputTiktokUrl', 'tiktokUrl', true],
+          ['inputInstagramUrl', 'instagramUrl', false],
+          ['inputWhatsappUrl', 'whatsappUrl', false],
+          ['inputAnnouncement', 'announcement', false],
+          ['inputHeroHeadline', 'heroHeadline', false],
+          ['inputHeroDesc', 'heroSubheadline', false],
+          ['inputAboutP1', 'aboutP1', false],
+          ['inputAboutP2', 'aboutP2', false],
+          ['inputFooterInfo', 'footerInfo', false]
+        ];
+
+        textBindings.forEach(function (cfg) {
+          var inputEl = document.getElementById(cfg[0]);
+          var stateKey = cfg[1];
+          var rerenderProds = cfg[2];
+          if (!inputEl) return;
+
+          inputEl.addEventListener('input', function () {
+            appState[stateKey] = inputEl.value;
+            applyThemeAndBrand();
+            if (rerenderProds) renderProducts();
+            safeSaveState(appState, '● Perubahan tersimpan');
+          });
+        });
+
+        /* Upload logo custom & reset logo */
+        document.getElementById('inputCustomLogoFile').addEventListener('change', function (e) {
+          var file = e.target.files && e.target.files[0];
+          if (!file) return;
+          var reader = new FileReader();
+          reader.onload = function (ev) {
+            appState.customLogoDataUrl = ev.target && ev.target.result ? String(ev.target.result) : '';
+            applyThemeAndBrand();
+            safeSaveState(appState, '● Logo custom tersimpan');
+            showToast('Logo custom diterapkan.');
+          };
+          reader.readAsDataURL(file);
+        });
+
+        document.getElementById('resetLogoBtn').addEventListener('click', function () {
+          appState.customLogoDataUrl = '';
+          document.getElementById('inputCustomLogoFile').value = '';
+          applyThemeAndBrand();
+          safeSaveState(appState, '● Logo label kain Wivora dipulihkan');
+          showToast('Logo kembali ke label kain Wivora bawaan.');
+        });
+
+        /* Warna aksen & shade tiap bagian */
+        var accentPicker = document.getElementById('inputAccentColor');
+        accentPicker.addEventListener('input', function () {
+          appState.accentColor = accentPicker.value;
+          appState.accentDark = darkenHex(accentPicker.value, 22);
+          document.getElementById('accentHexCode').textContent = accentPicker.value.toUpperCase();
+          applyThemeAndBrand();
+          renderProducts();
+          safeSaveState(appState, '● Warna aksen tersimpan');
+        });
+
+        var shadeMap = [
+          ['shadeHeroColor', 'shadeHero'],
+          ['shadeCatalogColor', 'shadeCatalog'],
+          ['shadeMaterialsColor', 'shadeMaterials'],
+          ['shadeAboutColor', 'shadeAbout'],
+          ['shadeInfoColor', 'shadeInfo']
+        ];
+
+        shadeMap.forEach(function (pair) {
+          var picker = document.getElementById(pair[0]);
+          var key = pair[1];
+          picker.addEventListener('input', function () {
+            appState[key] = picker.value;
+            applyThemeAndBrand();
+            safeSaveState(appState, '● Shade bagian tersimpan');
+          });
+        });
+
+        /* Simpan produk baru atau hasil edit */
+        document.getElementById('productEditorForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var editId = document.getElementById('editProductId').value.trim();
+          var nameVal = document.getElementById('prodName').value.trim();
+          var catVal = document.getElementById('prodCategory').value;
+          var priceVal = document.getElementById('prodPrice').value.trim() || 'Rp 39.000';
+          var badgeVal = document.getElementById('prodBadge').value.trim() || 'Koleksi';
+          var sizeVal = document.getElementById('prodSize').value.trim() || '115 x 115 cm';
+          var descVal = document.getElementById('prodDesc').value.trim() || 'Koleksi hijab nyaman dari Wivora.';
+          var swatchesVal = parseSwatchesText(document.getElementById('prodSwatches').value);
+          var fileInput = document.getElementById('prodImageFile');
+          var uploadedFile = fileInput.files && fileInput.files[0];
+
+          if (!nameVal) {
+            showToast('Nama produk wajib diisi.');
+            return;
+          }
+
+          function commitProduct(imageSrc) {
+            if (editId) {
+              appState.products = appState.products.map(function (p) {
+                if (p.id !== editId) return p;
+                return {
+                  id: p.id,
+                  name: nameVal,
+                  category: catVal,
+                  price: priceVal,
+                  badge: badgeVal,
+                  size: sizeVal,
+                  desc: descVal,
+                  styling: p.styling,
+                  care: p.care,
+                  image: imageSrc || p.image,
+                  swatches: swatchesVal
+                };
+              });
+              showToast('Produk diperbarui.');
+            } else {
+              var newProd = {
+                id: 'prod-' + Date.now(),
+                name: nameVal,
+                category: catVal,
+                price: priceVal,
+                badge: badgeVal,
+                size: sizeVal,
+                desc: descVal,
+                styling: 'Sesuaikan lipatan dan peniti agar nyaman digunakan sepanjang hari.',
+                care: 'Cuci lembut dengan tangan, hindari pemutih, dan setrika suhu rendah hingga sedang.',
+                image: imageSrc || createHijabSvgDataUrl('#F6F1E8', '#E3D6C4', appState.accentColor || '#7A6353', nameVal),
+                swatches: swatchesVal
+              };
+              appState.products.unshift(newProd);
+              showToast('Produk baru ditambahkan.');
+            }
+
+            renderProducts();
+            renderAdminProductList();
+            resetProductForm();
+            safeSaveState(appState, '● Katalog tersimpan');
+          }
+
+          if (uploadedFile) {
+            var reader = new FileReader();
+            reader.onload = function (ev) {
+              commitProduct(ev.target && ev.target.result ? String(ev.target.result) : '');
+            };
+            reader.readAsDataURL(uploadedFile);
+          } else {
+            commitProduct('');
+          }
+        });
+
+        document.getElementById('cancelEditProductBtn').addEventListener('click', resetProductForm);
+
+        /* Export JSON */
+        document.getElementById('exportJsonBtn').addEventListener('click', function () {
+          try {
+            var jsonStr = JSON.stringify(appState, null, 2);
+            var blob = new Blob([jsonStr], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'wivora-personalization.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('File JSON berhasil diunduh.');
+          } catch (err) {
+            showToast('Gagal mengekspor JSON.');
+          }
+        });
+
+        /* Import JSON */
+        document.getElementById('importJsonTriggerBtn').addEventListener('click', function () {
+          document.getElementById('importJsonFileInput').click();
+        });
+
+        document.getElementById('importJsonFileInput').addEventListener('change', function (e) {
+          var file = e.target.files && e.target.files[0];
+          if (!file) return;
+          var reader = new FileReader();
+          reader.onload = function (ev) {
+            try {
+              var parsed = JSON.parse(String(ev.target.result || '{}'));
+              appState = normalizeState(parsed);
+              selectedSwatchIndexByProdId = {};
+              activeCategory = 'Semua';
+              applyThemeAndBrand();
+              renderCategoryFilters();
+              renderProducts();
+              populateCustomizerInputs();
+              safeSaveState(appState, '● Data JSON diimpor & tersimpan');
+              showToast('Data personalisasi berhasil diimpor.');
+            } catch (err) {
+              showToast('Format file JSON tidak valid.');
+            }
+          };
+          reader.readAsText(file);
+          e.target.value = '';
+        });
+
+        /* Reset Default */
+        document.getElementById('resetDefaultAllBtn').addEventListener('click', function () {
+          appState = getDefaultState();
+          selectedSwatchIndexByProdId = {};
+          activeCategory = 'Semua';
+          resetProductForm();
+          applyThemeAndBrand();
+          renderCategoryFilters();
+          renderProducts();
+          populateCustomizerInputs();
+          safeSaveState(appState, '● Dikembalikan ke pengaturan default');
+          showToast('Pengaturan & katalog dikembalikan ke default.');
+        });
+      }
+
+      /* Inisialisasi saat DOM siap */
+      function initWivoraApp() {
+        try {
+          applyThemeAndBrand();
+          renderCategoryFilters();
+          renderProducts();
+          bindEvents();
+        } catch (err) {
+          var fallbackRoot = document.body;
+          if (fallbackRoot) {
+            fallbackRoot.innerHTML = '<div style="padding:24px;font-family:sans-serif;"><h2>Wivora - Official store &amp; cataloge</h2><p>Terjadi kendala saat memuat tampilan. Silakan muat ulang halaman.</p></div>';
+          }
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initWivoraApp);
+      } else {
+        initWivoraApp();
+      }
+    })();
+  </script>
+</body>
+</html>
