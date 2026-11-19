@@ -137,7 +137,7 @@
       }
     }
 
-    /* Header Sticky Tanpa Menu Titik Tiga */
+    /* Header Sticky */
     .site-header {
       position: sticky;
       top: 0;
@@ -865,7 +865,7 @@
     }
 
     /* =========================================================
-       9. MODAL DETAIL PRODUK & PANEL PERSONALISASI
+       9. MODAL DETAIL PRODUK & PANEL DEVELOPER
        ========================================================= */
     .modal-backdrop {
       position: fixed;
@@ -907,7 +907,7 @@
       }
     }
 
-    /* Drawer Personalisasi */
+    /* Drawer Developer */
     .customizer-drawer {
       position: fixed;
       top: 0;
@@ -1057,7 +1057,6 @@
       margin-bottom: 8px;
     }
 
-    /* Toast Notifikasi (Pengganti alert()) */
     .toast-box {
       position: fixed;
       bottom: 20px;
@@ -1088,7 +1087,7 @@
 </head>
 <body>
   <!-- =========================================================
-       1. HEADER NAVIGASI ATAS (LANGSUNG TERLIHAT, TANPA TITIK TIGA)
+       1. HEADER NAVIGASI ATAS
        ========================================================= -->
   <header class="site-header">
     <div class="container header-inner">
@@ -1108,8 +1107,9 @@
       </nav>
 
       <div class="header-actions">
-        <button type="button" id="openCustomizerBtn" class="btn btn-outline btn-sm">
-          <span>Personalisasi</span>
+        <!-- Hanya muncul saat mode developer aktif (?mode=dev atau ?dev=1) -->
+        <button type="button" id="openCustomizerBtn" class="btn btn-outline btn-sm hidden">
+          <span>Dev Panel</span>
         </button>
         <a id="headerShopeeLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-sm">
           Shopee
@@ -1167,9 +1167,9 @@
             <strong>2 Channel Resmi</strong>
             <span>Shopee &amp; TikTok Shop</span>
           </div>
-          <div class="mini-stat">
-            <strong>Bisa Dikustom</strong>
-            <span>Panel personalisasi</span>
+          <div class="mini-stat" id="heroThirdStat">
+            <strong>Katalog Resmi</strong>
+            <span>Detail bahan &amp; ukuran</span>
           </div>
         </div>
       </div>
@@ -1181,8 +1181,8 @@
         <div class="hero-photo-caption">
           <div>
             <div style="font-size:11px;font-weight:700;color:var(--wivora-accent);">SIGNATURE EDIT</div>
-            <div id="heroCardTitle" class="font-editorial" style="font-size:18px;font-weight:700;">Voal &amp; Ceruty Series</div>
-            <div id="heroCardNote" style="font-size:12px;color:var(--ink-secondary);">Jahitan tepi rapi &amp; warna menenangkan</div>
+            <div class="font-editorial" style="font-size:18px;font-weight:700;">Voal &amp; Ceruty Series</div>
+            <div style="font-size:12px;color:var(--ink-secondary);">Jahitan tepi rapi &amp; warna menenangkan</div>
           </div>
           <a href="#koleksi" class="btn btn-accent btn-sm">Jelajahi</a>
         </div>
@@ -1362,9 +1362,7 @@
         <div>
           &copy; <span id="copyrightYear">2026</span> <strong id="copyrightBrandName" style="color:#FFFFFF;">Wivora - Official store &amp; cataloge</strong>. Semua hak dilindungi.
         </div>
-        <div>
-          Pengaturan personalisasi tersimpan otomatis di browser (localStorage) dengan dukungan Export/Import JSON.
-        </div>
+        <div id="footerModeNote">Katalog resmi Wivora.</div>
       </div>
     </div>
   </footer>
@@ -1420,15 +1418,15 @@
   </div>
 
   <!-- =========================================================
-       8. PANEL PERSONALISASI WEB (DRAWER)
+       8. PANEL DEVELOPER (HANYA AKTIF JIKA ?mode=dev ATAU ?dev=1)
        ========================================================= -->
   <div id="customizerBackdrop" class="modal-backdrop" style="justify-content:flex-end;padding:0;">
-    <aside id="customizerDrawer" class="customizer-drawer" role="dialog" aria-modal="true" aria-label="Personalisasi Web Wivora">
+    <aside id="customizerDrawer" class="customizer-drawer" role="dialog" aria-modal="true" aria-label="Developer Panel Wivora">
       <div class="drawer-head">
         <div>
-          <div style="font-size:15px;font-weight:700;">Personalisasi Web Wivora</div>
+          <div style="font-size:15px;font-weight:700;">Developer Panel Wivora</div>
           <div id="saveStatusText" style="font-size:11px;color:var(--wivora-accent-dark);font-weight:600;">
-            ● Tersimpan otomatis di browser
+            ● Mode Developer Aktif
           </div>
         </div>
         <button type="button" id="closeCustomizerBtn" class="btn btn-outline btn-sm">Tutup</button>
@@ -1441,7 +1439,6 @@
       </div>
 
       <div class="drawer-body">
-        <!-- TAB 1: BRAND, LOGO & LINK -->
         <div id="tabPanel-brand">
           <div class="drawer-section-card">
             <h4>Identitas &amp; Logo Label Kain Wivora</h4>
@@ -1487,7 +1484,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: WARNA AKSEN, SHADE TIAP BAGIAN & TEKS -->
         <div id="tabPanel-tampilan" class="hidden">
           <div class="drawer-section-card">
             <h4>Warna Aksen Utama</h4>
@@ -1555,7 +1551,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: KELOLA KATALOG & EXPORT/IMPORT JSON -->
         <div id="tabPanel-katalog" class="hidden">
           <div class="drawer-section-card">
             <h4 id="productFormTitle">Tambah Produk Hijab Baru</h4>
@@ -1628,20 +1623,40 @@
     </aside>
   </div>
 
-  <!-- Toast Notifikasi -->
   <div id="toastNotification" class="toast-box" role="status" aria-live="polite"></div>
 
   <!-- =========================================================
-       9. JAVASCRIPT (TAHAN ERROR, NORMALISASI STATE & RENDER)
+       9. JAVASCRIPT (MODE PUBLIK vs MODE DEVELOPER)
        ========================================================= -->
   <script>
     (function () {
       'use strict';
 
-      var STORAGE_KEY = 'wivora_official_store_cataloge_v1';
+      var STORAGE_KEY = 'wivora_dev_state_v1';
       var CATEGORIES = ['Semua', 'Paris Voal', 'Pashmina Ceruty', 'Bergo Daily', 'Inner & Scarf'];
 
-      /* Pembuat ilustrasi SVG inline (tanpa ketergantungan file eksternal) */
+      /* Deteksi mode developer dari query string (?mode=dev atau ?dev=1) */
+      function detectDevMode() {
+        try {
+          var params = new URLSearchParams(window.location.search || '');
+          var modeParam = (params.get('mode') || '').toLowerCase();
+          var devParam = (params.get('dev') || '').toLowerCase();
+          return modeParam === 'dev' || devParam === '1' || devParam === 'true';
+        } catch (err) {
+          return false;
+        }
+      }
+
+      var IS_DEV_MODE = detectDevMode();
+
+      function escapeXml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
       function createHijabSvgDataUrl(bgHex, clothHex, accentHex, labelText) {
         var svg = [
           '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">',
@@ -1659,14 +1674,6 @@
           '</svg>'
         ].join('');
         return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-      }
-
-      function escapeXml(str) {
-        return String(str || '')
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
       }
 
       function getDefaultProducts() {
@@ -1779,11 +1786,7 @@
         var merged = {};
         Object.keys(def).forEach(function (k) {
           if (k === 'products') return;
-          if (typeof raw[k] === 'string') {
-            merged[k] = raw[k];
-          } else {
-            merged[k] = def[k];
-          }
+          merged[k] = typeof raw[k] === 'string' ? raw[k] : def[k];
         });
 
         if (Array.isArray(raw.products) && raw.products.length > 0) {
@@ -1814,8 +1817,10 @@
         return merged;
       }
 
-      /* Wrapper aman untuk localStorage */
-      function safeLoadState() {
+      /* Publik selalu memakai state default agar tampilan publik konsisten;
+         Mode Developer memuat/menyimpan state di localStorage */
+      function loadStateForCurrentMode() {
+        if (!IS_DEV_MODE) return getDefaultState();
         try {
           if (!window.localStorage) return getDefaultState();
           var rawStr = window.localStorage.getItem(STORAGE_KEY);
@@ -1826,20 +1831,16 @@
         }
       }
 
-      function safeSaveState(nextState, statusLabel) {
+      function saveDevState(nextState, label) {
+        if (!IS_DEV_MODE) return;
         try {
           if (window.localStorage) {
             window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
           }
           var statusEl = document.getElementById('saveStatusText');
-          if (statusEl) {
-            statusEl.textContent = statusLabel || '● Tersimpan otomatis di browser';
-          }
+          if (statusEl) statusEl.textContent = label || '● Tersimpan di browser (Dev)';
         } catch (err) {
-          var statusElErr = document.getElementById('saveStatusText');
-          if (statusElErr) {
-            statusElErr.textContent = '● Mode memori aktif (penyimpanan lokal terbatas)';
-          }
+          /* Abaikan jika storage dibatasi */
         }
       }
 
@@ -1883,7 +1884,6 @@
         }, 2400);
       }
 
-      /* SVG Emblem botani simetris + garis pemisah vertikal sesuai detail label kain Wivora */
       function buildBotanicalLogoVisual(customLogoUrl, brandScript) {
         if (customLogoUrl) {
           return '<img src="' + customLogoUrl + '" alt="Logo ' + escapeXml(brandScript) + '" style="height:26px;width:auto;max-width:110px;object-fit:contain;" />';
@@ -1900,12 +1900,33 @@
         ].join('');
       }
 
-      /* =========================================================
-         10. STATE RUNTIME & RENDERING
-         ========================================================= */
-      var appState = safeLoadState();
+      var appState = loadStateForCurrentMode();
       var activeCategory = 'Semua';
       var selectedSwatchIndexByProdId = {};
+
+      function applyModeVisibility() {
+        var devBtn = document.getElementById('openCustomizerBtn');
+        var thirdStat = document.getElementById('heroThirdStat');
+        var footerNote = document.getElementById('footerModeNote');
+
+        if (IS_DEV_MODE) {
+          if (devBtn) devBtn.classList.remove('hidden');
+          if (thirdStat) {
+            thirdStat.innerHTML = '<strong>Mode Developer</strong><span>Panel kustomisasi aktif</span>';
+          }
+          if (footerNote) {
+            footerNote.textContent = 'Mode Developer aktif (?mode=dev) • Draft tersimpan di localStorage.';
+          }
+        } else {
+          if (devBtn) devBtn.classList.add('hidden');
+          if (thirdStat) {
+            thirdStat.innerHTML = '<strong>Katalog Resmi</strong><span>Detail bahan &amp; ukuran</span>';
+          }
+          if (footerNote) {
+            footerNote.textContent = 'Katalog resmi Wivora.';
+          }
+        }
+      }
 
       function getSelectedSwatch(product) {
         var list = (product && Array.isArray(product.swatches) && product.swatches.length > 0)
@@ -1919,9 +1940,9 @@
       function buildChannelUrl(baseUrl, productName, shadeName, channelName) {
         var cleanBase = String(baseUrl || '').trim();
         if (!cleanBase) return '#koleksi';
-        var queryPart = encodeURIComponent(productName + ' - ' + shadeName + ' (' + channelName + ')');
         if (cleanBase.indexOf('wa.me') !== -1) {
           var sep = cleanBase.indexOf('?') === -1 ? '?' : '&';
+          var queryPart = encodeURIComponent(productName + ' - ' + shadeName + ' (' + channelName + ')');
           return cleanBase + (cleanBase.indexOf('text=') === -1 ? sep + 'text=' + queryPart : '');
         }
         return cleanBase;
@@ -1973,9 +1994,7 @@
         if (heroSubheadline) heroSubheadline.textContent = appState.heroSubheadline || '';
 
         var heroImg = document.getElementById('heroShowcaseImg');
-        if (heroImg && appState.heroShowcaseImage) {
-          heroImg.src = appState.heroShowcaseImage;
-        }
+        if (heroImg && appState.heroShowcaseImage) heroImg.src = appState.heroShowcaseImage;
 
         var about1 = document.getElementById('aboutStoryParagraph1');
         var about2 = document.getElementById('aboutStoryParagraph2');
@@ -2082,7 +2101,6 @@
           grid.appendChild(card);
         });
 
-        /* Pasang event klik swatch */
         grid.querySelectorAll('.swatch-dot').forEach(function (dotBtn) {
           dotBtn.addEventListener('click', function () {
             var pId = dotBtn.getAttribute('data-prod-id');
@@ -2094,26 +2112,15 @@
           });
         });
 
-        /* Pasang event buka modal detail produk */
         grid.querySelectorAll('.product-detail-trigger').forEach(function (detBtn) {
           detBtn.addEventListener('click', function () {
-            var pId = detBtn.getAttribute('data-detail-id');
-            openProductDetailModal(pId);
+            openProductDetailModal(detBtn.getAttribute('data-detail-id'));
           });
         });
       }
 
-      /* =========================================================
-         11. MODAL DETAIL PRODUK
-         ========================================================= */
       function openProductDetailModal(productId) {
-        var prod = null;
-        for (var i = 0; i < appState.products.length; i++) {
-          if (appState.products[i].id === productId) {
-            prod = appState.products[i];
-            break;
-          }
-        }
+        var prod = appState.products.find(function (p) { return p.id === productId; });
         if (!prod) return;
 
         var sel = getSelectedSwatch(prod);
@@ -2137,9 +2144,7 @@
         document.getElementById('productDetailModal').classList.remove('open');
       }
 
-      /* =========================================================
-         12. PANEL PERSONALISASI & MANAJEMEN PRODUK / JSON
-         ========================================================= */
+      /* Fungsi Dev Panel hanya diikat jika IS_DEV_MODE true */
       function populateCustomizerInputs() {
         document.getElementById('inputBrandScript').value = appState.brandScript || 'Wivora';
         document.getElementById('inputPageTitle').value = appState.pageTitle || 'Wivora - Official store & cataloge';
@@ -2170,9 +2175,7 @@
 
       function swatchesToText(swatches) {
         if (!Array.isArray(swatches)) return '';
-        return swatches.map(function (s) {
-          return s.name + ':' + s.hex;
-        }).join(', ');
+        return swatches.map(function (s) { return s.name + ':' + s.hex; }).join(', ');
       }
 
       function parseSwatchesText(rawText) {
@@ -2216,8 +2219,7 @@
 
         container.querySelectorAll('[data-edit-id]').forEach(function (btn) {
           btn.addEventListener('click', function () {
-            var id = btn.getAttribute('data-edit-id');
-            startEditProduct(id);
+            startEditProduct(btn.getAttribute('data-edit-id'));
           });
         });
 
@@ -2225,29 +2227,21 @@
           btn.addEventListener('click', function () {
             var id = btn.getAttribute('data-del-id');
             if (appState.products.length <= 1) {
-              showToast('Minimal harus ada 1 produk di katalog.');
+              showToast('Minimal harus ada 1 produk.');
               return;
             }
             appState.products = appState.products.filter(function (p) { return p.id !== id; });
             delete selectedSwatchIndexByProdId[id];
             renderProducts();
             renderAdminProductList();
-            safeSaveState(appState, '● Produk dihapus & tersimpan');
-            showToast('Produk dihapus.');
+            saveDevState(appState, '● Produk dihapus');
           });
         });
       }
 
       function startEditProduct(productId) {
-        var prod = null;
-        for (var i = 0; i < appState.products.length; i++) {
-          if (appState.products[i].id === productId) {
-            prod = appState.products[i];
-            break;
-          }
-        }
+        var prod = appState.products.find(function (p) { return p.id === productId; });
         if (!prod) return;
-
         document.getElementById('productFormTitle').textContent = 'Edit Produk: ' + prod.name;
         document.getElementById('editProductId').value = prod.id;
         document.getElementById('prodName').value = prod.name;
@@ -2269,6 +2263,7 @@
       }
 
       function openCustomizer() {
+        if (!IS_DEV_MODE) return;
         populateCustomizerInputs();
         document.getElementById('customizerBackdrop').classList.add('open');
         document.getElementById('customizerDrawer').classList.add('open');
@@ -2279,19 +2274,15 @@
         document.getElementById('customizerDrawer').classList.remove('open');
       }
 
-      function bindEvents() {
+      function bindDevEvents() {
+        if (!IS_DEV_MODE) return;
+
         document.getElementById('openCustomizerBtn').addEventListener('click', openCustomizer);
         document.getElementById('closeCustomizerBtn').addEventListener('click', closeCustomizer);
         document.getElementById('customizerBackdrop').addEventListener('click', function (e) {
           if (e.target.id === 'customizerBackdrop') closeCustomizer();
         });
 
-        document.getElementById('closeDetailModalBtn').addEventListener('click', closeProductDetailModal);
-        document.getElementById('productDetailModal').addEventListener('click', function (e) {
-          if (e.target.id === 'productDetailModal') closeProductDetailModal();
-        });
-
-        /* Ganti Tab Drawer */
         document.querySelectorAll('.drawer-tab-btn').forEach(function (tabBtn) {
           tabBtn.addEventListener('click', function () {
             var targetTab = tabBtn.getAttribute('data-tab');
@@ -2305,7 +2296,6 @@
           });
         });
 
-        /* Binding input teks & link */
         var textBindings = [
           ['inputBrandScript', 'brandScript', true],
           ['inputPageTitle', 'pageTitle', false],
@@ -2324,19 +2314,15 @@
 
         textBindings.forEach(function (cfg) {
           var inputEl = document.getElementById(cfg[0]);
-          var stateKey = cfg[1];
-          var rerenderProds = cfg[2];
           if (!inputEl) return;
-
           inputEl.addEventListener('input', function () {
-            appState[stateKey] = inputEl.value;
+            appState[cfg[1]] = inputEl.value;
             applyThemeAndBrand();
-            if (rerenderProds) renderProducts();
-            safeSaveState(appState, '● Perubahan tersimpan');
+            if (cfg[2]) renderProducts();
+            saveDevState(appState, '● Perubahan tersimpan (Dev)');
           });
         });
 
-        /* Upload logo custom & reset logo */
         document.getElementById('inputCustomLogoFile').addEventListener('change', function (e) {
           var file = e.target.files && e.target.files[0];
           if (!file) return;
@@ -2344,7 +2330,7 @@
           reader.onload = function (ev) {
             appState.customLogoDataUrl = ev.target && ev.target.result ? String(ev.target.result) : '';
             applyThemeAndBrand();
-            safeSaveState(appState, '● Logo custom tersimpan');
+            saveDevState(appState, '● Logo custom tersimpan');
             showToast('Logo custom diterapkan.');
           };
           reader.readAsDataURL(file);
@@ -2354,11 +2340,9 @@
           appState.customLogoDataUrl = '';
           document.getElementById('inputCustomLogoFile').value = '';
           applyThemeAndBrand();
-          safeSaveState(appState, '● Logo label kain Wivora dipulihkan');
-          showToast('Logo kembali ke label kain Wivora bawaan.');
+          saveDevState(appState, '● Logo default dipulihkan');
         });
 
-        /* Warna aksen & shade tiap bagian */
         var accentPicker = document.getElementById('inputAccentColor');
         accentPicker.addEventListener('input', function () {
           appState.accentColor = accentPicker.value;
@@ -2366,45 +2350,36 @@
           document.getElementById('accentHexCode').textContent = accentPicker.value.toUpperCase();
           applyThemeAndBrand();
           renderProducts();
-          safeSaveState(appState, '● Warna aksen tersimpan');
+          saveDevState(appState, '● Warna aksen tersimpan');
         });
 
-        var shadeMap = [
+        [
           ['shadeHeroColor', 'shadeHero'],
           ['shadeCatalogColor', 'shadeCatalog'],
           ['shadeMaterialsColor', 'shadeMaterials'],
           ['shadeAboutColor', 'shadeAbout'],
           ['shadeInfoColor', 'shadeInfo']
-        ];
-
-        shadeMap.forEach(function (pair) {
-          var picker = document.getElementById(pair[0]);
-          var key = pair[1];
-          picker.addEventListener('input', function () {
-            appState[key] = picker.value;
+        ].forEach(function (pair) {
+          document.getElementById(pair[0]).addEventListener('input', function (e) {
+            appState[pair[1]] = e.target.value;
             applyThemeAndBrand();
-            safeSaveState(appState, '● Shade bagian tersimpan');
+            saveDevState(appState, '● Shade tersimpan');
           });
         });
 
-        /* Simpan produk baru atau hasil edit */
         document.getElementById('productEditorForm').addEventListener('submit', function (e) {
           e.preventDefault();
           var editId = document.getElementById('editProductId').value.trim();
           var nameVal = document.getElementById('prodName').value.trim();
+          if (!nameVal) return;
+
           var catVal = document.getElementById('prodCategory').value;
           var priceVal = document.getElementById('prodPrice').value.trim() || 'Rp 39.000';
           var badgeVal = document.getElementById('prodBadge').value.trim() || 'Koleksi';
           var sizeVal = document.getElementById('prodSize').value.trim() || '115 x 115 cm';
           var descVal = document.getElementById('prodDesc').value.trim() || 'Koleksi hijab nyaman dari Wivora.';
           var swatchesVal = parseSwatchesText(document.getElementById('prodSwatches').value);
-          var fileInput = document.getElementById('prodImageFile');
-          var uploadedFile = fileInput.files && fileInput.files[0];
-
-          if (!nameVal) {
-            showToast('Nama produk wajib diisi.');
-            return;
-          }
+          var uploadedFile = document.getElementById('prodImageFile').files && document.getElementById('prodImageFile').files[0];
 
           function commitProduct(imageSrc) {
             if (editId) {
@@ -2426,7 +2401,7 @@
               });
               showToast('Produk diperbarui.');
             } else {
-              var newProd = {
+              appState.products.unshift({
                 id: 'prod-' + Date.now(),
                 name: nameVal,
                 category: catVal,
@@ -2438,15 +2413,13 @@
                 care: 'Cuci lembut dengan tangan, hindari pemutih, dan setrika suhu rendah hingga sedang.',
                 image: imageSrc || createHijabSvgDataUrl('#F6F1E8', '#E3D6C4', appState.accentColor || '#7A6353', nameVal),
                 swatches: swatchesVal
-              };
-              appState.products.unshift(newProd);
+              });
               showToast('Produk baru ditambahkan.');
             }
-
             renderProducts();
             renderAdminProductList();
             resetProductForm();
-            safeSaveState(appState, '● Katalog tersimpan');
+            saveDevState(appState, '● Katalog tersimpan');
           }
 
           if (uploadedFile) {
@@ -2462,26 +2435,19 @@
 
         document.getElementById('cancelEditProductBtn').addEventListener('click', resetProductForm);
 
-        /* Export JSON */
         document.getElementById('exportJsonBtn').addEventListener('click', function () {
-          try {
-            var jsonStr = JSON.stringify(appState, null, 2);
-            var blob = new Blob([jsonStr], { type: 'application/json' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'wivora-personalization.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('File JSON berhasil diunduh.');
-          } catch (err) {
-            showToast('Gagal mengekspor JSON.');
-          }
+          var blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'wivora-config.json';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('JSON berhasil diekspor.');
         });
 
-        /* Import JSON */
         document.getElementById('importJsonTriggerBtn').addEventListener('click', function () {
           document.getElementById('importJsonFileInput').click();
         });
@@ -2492,25 +2458,23 @@
           var reader = new FileReader();
           reader.onload = function (ev) {
             try {
-              var parsed = JSON.parse(String(ev.target.result || '{}'));
-              appState = normalizeState(parsed);
+              appState = normalizeState(JSON.parse(String(ev.target.result || '{}')));
               selectedSwatchIndexByProdId = {};
               activeCategory = 'Semua';
               applyThemeAndBrand();
               renderCategoryFilters();
               renderProducts();
               populateCustomizerInputs();
-              safeSaveState(appState, '● Data JSON diimpor & tersimpan');
-              showToast('Data personalisasi berhasil diimpor.');
+              saveDevState(appState, '● JSON diimpor');
+              showToast('JSON berhasil diimpor.');
             } catch (err) {
-              showToast('Format file JSON tidak valid.');
+              showToast('Format JSON tidak valid.');
             }
           };
           reader.readAsText(file);
           e.target.value = '';
         });
 
-        /* Reset Default */
         document.getElementById('resetDefaultAllBtn').addEventListener('click', function () {
           appState = getDefaultState();
           selectedSwatchIndexByProdId = {};
@@ -2520,31 +2484,21 @@
           renderCategoryFilters();
           renderProducts();
           populateCustomizerInputs();
-          safeSaveState(appState, '● Dikembalikan ke pengaturan default');
-          showToast('Pengaturan & katalog dikembalikan ke default.');
+          saveDevState(appState, '● Reset default');
+          showToast('Dikembalikan ke default.');
         });
       }
 
-      /* Inisialisasi saat DOM siap */
-      function initWivoraApp() {
-        try {
-          applyThemeAndBrand();
-          renderCategoryFilters();
-          renderProducts();
-          bindEvents();
-        } catch (err) {
-          var fallbackRoot = document.body;
-          if (fallbackRoot) {
-            fallbackRoot.innerHTML = '<div style="padding:24px;font-family:sans-serif;"><h2>Wivora - Official store &amp; cataloge</h2><p>Terjadi kendala saat memuat tampilan. Silakan muat ulang halaman.</p></div>';
-          }
-        }
-      }
+      document.getElementById('closeDetailModalBtn').addEventListener('click', closeProductDetailModal);
+      document.getElementById('productDetailModal').addEventListener('click', function (e) {
+        if (e.target.id === 'productDetailModal') closeProductDetailModal();
+      });
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initWivoraApp);
-      } else {
-        initWivoraApp();
-      }
+      applyModeVisibility();
+      applyThemeAndBrand();
+      renderCategoryFilters();
+      renderProducts();
+      bindDevEvents();
     })();
   </script>
 </body>
